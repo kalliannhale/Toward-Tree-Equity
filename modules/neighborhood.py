@@ -17,18 +17,51 @@ class Neighborhood:
         priority zone.
     '''
     
+    used_districts = set()
+    
     def __init__(self, district):
+        
+        if district in Neighborhood.used_districts:
+            raise ValueError(f"Duplicate district found: {district}.")
+        
+        Neighborhood.used_districts.add(district)
+        
         self.district = district
-        self.data = self.district_data(district)
-        self.canopy = []
+        self.dist_stats = self.dist_data(district)
+        self.parcels = {}
     
     def get_district(self):
         return self.district
     
-    def district_data(self, district):
+    def get_dist_stats(self):
+        return self.dist_stats
+    
+    def dist_data(self, district):
         '''
-        stores district data in a dictionary
+        creates a dictionary from district data
         '''
+        pass
+    
+    def get_parcels(self):
+        return self.parcels
+    
+    def store_parcel(self, parcel):
+        '''
+        stores parcels
+        '''
+        
+        address = parcel.address
+        self.parcels[address] = parcel
+    
+    def analyze_parcels(self, filepath):
+        data['ST_NUM'] = data['ST_NUM'].str.extract('(\d+)')
+        addresses = []
+        for index, row in data.iterrows():
+            address = f"{row['ST_NUM']} {row['ST_NAME']}, {row['ST_NAME_SU']}, Boston, MA"
+            addresses.append(address.lower())
+        return pd.DataFrame({'Address': addresses})
+    
+    def open_spaces(self, district):
         pass
     
     def csv_path(self, topic):
@@ -45,20 +78,6 @@ class Neighborhood:
             }
         
         return filepath[topic]
-    
-    def analyze_parcels(self, filepath):
-        data['ST_NUM'] = data['ST_NUM'].str.extract('(\d+)')
-        addresses = []
-        for index, row in data.iterrows():
-            address = f"{row['ST_NUM']} {row['ST_NAME']}, {row['ST_NAME_SU']}, Boston, MA"
-            addresses.append(address.lower())
-        return pd.DataFrame({'Address': addresses})
-    
-    def open_spaces(self, district):
-        pass
-    
-    def canopy(self):
-        pass
     
     def compare_geoids(topic_one, topic_two):
       """

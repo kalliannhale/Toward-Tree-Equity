@@ -22,7 +22,7 @@ class Tree(Parcel):
             longitude (abbrv. 'long'), & geoid.
             
     '''
-    def __init__(self, status, species, maturation, health, last_seen, district, address):
+    def __init__(self, species, maturation, health, last_seen, status=True, district, address):
         
         super().__init__(district, address)
         
@@ -32,6 +32,7 @@ class Tree(Parcel):
         self.health = health
         self.address = address
         self.last_seen = last_seen
+        self.status = status
         
     def get_status(self):
         return self.status
@@ -49,14 +50,12 @@ class Tree(Parcel):
         return self.last_seen
     
     def plan_tree(self):
-        pass
+        self.status = 'planned'
+        return self.status
     
-    def record_trees(self):
-        # adds to Parcel
-        pass
-    
-    def report_loss(self):
-        pass
+    def tree_loss(self):
+        self.status = False
+        return self.status
     
     def __str__(self):
         pass

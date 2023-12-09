@@ -40,7 +40,10 @@ class Parcel(Neighborhood):
             self.geoid = float(self.address.iat[0, 2])
             self.equity_score = self.tree_equity_score()
             self.heat_disparity = self.heat_index()
-            self.trees = []
+            self.trees = {}
+            self.planned = {}
+            # self.land_use = self.findlanduse(address)
+            # self.planned_trees = {}
         
         except Exception as e:
             print(f"Geocoding failed for address '{address}': {e}")
@@ -80,7 +83,36 @@ class Parcel(Neighborhood):
     def get_trees(self):
         return self.trees
     
-    def land_use(self):
+    def plan_tree(self, tree, species):
+        
+        if species not in self.planned:
+            self.planned[species] = [tree]
+        else:
+           self.planned[species].append(tree)
+    
+    def add_tree(self, tree):
+        '''
+        stores trees at this address in dict with species as key
+        
+        returns: None
+        '''
+        species = tree.species
+        
+        if tree.status == True:
+            if species not in self.trees:
+                self.trees[species] = [tree]
+            self.tree_dict[species].append(tree)
+            
+        elif tree.status == 'planned':
+            self.plan_tree(tree, species)
+    
+    def remove_tree(self, species):
+        
+        for t in self.trees[species]:
+            if t.status == False:
+                self.trees[species].remove(t)
+            
+    def find_landuse(self, address):
         # filepath = self.csv_path('parcels')
         # df = pd.read_csv(filepath)
         # df = df.loc[df['']]
@@ -133,12 +165,6 @@ class Parcel(Neighborhood):
         self.heat_disparity = df['temp_diff'][0]
         
         return self.heat_disparity
-    
-    def trees_added(self):
-        pass
-    
-    def trees_lost(self):
-        pass
     
     def __str__(self):
         pass
