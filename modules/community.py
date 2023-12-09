@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 module -- community.py
     
@@ -26,15 +24,14 @@ class Community:
     def create_tables(self):
         cursor = self.connection.cursor()
 
-        # Create Neighborhoods table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS neighborhoods (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 district TEXT NOT NULL
             )
         ''')
+        # creating Neighborhood table
 
-        # Create Parcels table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS parcels (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,8 +40,8 @@ class Community:
                 FOREIGN KEY (district_id) REFERENCES neighborhoods (id)
             )
         ''')
+        # creating Parcel table
 
-        # Create Trees table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS trees (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,27 +54,28 @@ class Community:
                 FOREIGN KEY (parcel_id) REFERENCES parcels (id)
             )
         ''')
+        # creating Tree table
 
         self.connection.commit()
 
     def add_neighborhood(self, district):
         cursor = self.connection.cursor()
 
-        # Check if a neighborhood with the same district exists
         cursor.execute('SELECT id FROM neighborhoods WHERE district=?', (district,))
         existing_neighborhood = cursor.fetchone()
 
         if existing_neighborhood:
             neighborhood_id = existing_neighborhood[0]
         else:
-            # Create a new neighborhood if it doesn't exist
             cursor.execute('INSERT INTO neighborhoods (district) VALUES (?)', (district,))
             neighborhood_id = cursor.lastrowid
+        
+        # only stores unique districts
 
         self.connection.commit()
 
-        # Return the neighborhood_id for further use
         return neighborhood_id
+        
 
     def add_parcel(self, address, district_id):
         cursor = self.connection.cursor()
@@ -87,29 +85,28 @@ class Community:
     def add_tree(self, tree):
         cursor = self.connection.cursor()
 
-        # Check if a parcel with the same address exists
         cursor.execute('SELECT id, district_id FROM parcels WHERE address=?', (tree.address,))
         existing_parcel = cursor.fetchone()
 
         if existing_parcel:
             parcel_id, district_id = existing_parcel
         else:
-            # Create a new parcel if it doesn't exist
             cursor.execute('INSERT INTO parcels (address, district_id) VALUES (?, ?)', (tree.address, tree.district_id))
             parcel_id = cursor.lastrowid
             district_id = tree.district_id
+            
+        # only stores unique addresses
 
-        # Add the tree to the trees table
         cursor.execute('''
             INSERT INTO trees (status, species, maturation, health, last_seen, parcel_id)
             VALUES (?, ?, ?, ?, ?, ?)
         ''', (tree.status, tree.species, tree.maturation, tree.health, tree.last_seen, parcel_id))
 
-        # If the parcel instance already exists, add the tree to its list of trees
+        # trees are stored in parcels of the same address
+        
         if existing_parcel:
             neighborhood_id = district_id
         else:
-            # Create a new Neighborhood instance and add it to the existing neighborhood
             neighborhood_id = self.add_neighborhood(tree.district)
             tree.parcel = Parcel(tree.address, tree.district)
             tree.parcel.add_tree(tree)
