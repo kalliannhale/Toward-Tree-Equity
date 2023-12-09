@@ -30,11 +30,11 @@ class Parcel(Neighborhood):
             self.latitude = self.address.iat[0, 1]
             self.geoid = float(self.address.iat[0, 2])
             self.equity_score = self.tree_equity_score()
-            self.heat_index = heat_index
+           # self.heat_index = heat_index
         
         except Exception as e:
             print(f"Geocoding failed for address '{address}': {e}")
-            print("Please format address accordingly: 'streetaddress streetname, city, state'")
+            print("Please format address accordingly: 'number streetname, city, state'")
             print("Do not include unit numbers.")
             self.address = address
             self.latitude = None
@@ -55,6 +55,9 @@ class Parcel(Neighborhood):
     def get_latitude(self):
         return self.latitude
     
+    def set_geoid(self):
+        self.geoid = float(int(self.geoid/10**3))
+    
     def get_geoid(self):
         return self.geoid
     
@@ -62,7 +65,7 @@ class Parcel(Neighborhood):
         return self.equity_score
     
     def get_heat_index(self):
-        return heat_index
+        return self.heat_index
     
     def land_use(self):
         filepath = self.csv_path('parcels')
@@ -100,7 +103,17 @@ class Parcel(Neighborhood):
             pass
         
     def heat_event_hours(self):
-        pass
+        
+        self.set_geoid()
+        
+        filepath = self.csv_path('equity_score')
+        df = pd.read_csv(filepath)
+        df = df.loc[df['GEOID'] == self.geoid]
+        df = df.reset_index()
+        
+        self.heat_index = df['temp_diff'][0]
+        
+        return self.heat_index
     
     def trees_added(self):
         pass

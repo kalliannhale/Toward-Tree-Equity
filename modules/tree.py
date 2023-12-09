@@ -9,9 +9,10 @@ module -- tree.py
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from community import Parcel
+from parcel import Parcel
+from pygris.geocode import geocode
 
-class Tree:
+class Tree(Parcel):
     '''
     Data visualization tool based off of community data.
     
@@ -21,7 +22,10 @@ class Tree:
             longitude (abbrv. 'long'), & geoid.
             
     '''
-    def __init__(self, status, species, maturation, health, address, last_seen):
+    def __init__(self, status, species, maturation, health, last_seen, district, address):
+        
+        super().__init__(district, address)
+        
         self.status = status
         self.species = species
         self.maturation = maturation
@@ -41,15 +45,11 @@ class Tree:
     def get_health(self):
         return self.health
     
-    def get_address(self):
-        return self.address
-    
     def get_last_seen(self):
         return self.last_seen
     
-    def get_latitude(self):
-        location = geocoder.geocode(self.address)
-        self.location = {'lat': location}
+    def plan_tree(self):
+        pass
     
     def record_tree(self):
         # adds to Parcel
