@@ -19,9 +19,18 @@ class Parcel(Neighborhood):
     Manages a specific address.
     '''
     
+    unique_parcels = set()
+    
     def __init__(self, address, district):
         
         super().__init__(district)
+        
+        address = address.lower()
+        
+        if address in Parcel.unique_parcels:
+            raise ValueError(f"Duplicate address found: {address}")
+            
+        Parcel.unique_parcels.add(address)
         
         try:
             self.geoerror = False
@@ -30,7 +39,8 @@ class Parcel(Neighborhood):
             self.latitude = self.address.iat[0, 1]
             self.geoid = float(self.address.iat[0, 2])
             self.equity_score = self.tree_equity_score()
-           # self.heat_index = heat_index
+            self.heat_disparity = self.heat_index()
+            self.trees = []
         
         except Exception as e:
             print(f"Geocoding failed for address '{address}': {e}")
@@ -67,10 +77,14 @@ class Parcel(Neighborhood):
     def get_heat_index(self):
         return self.heat_index
     
+    def get_trees(self):
+        return self.trees
+    
     def land_use(self):
-        filepath = self.csv_path('parcels')
-        df = pd.read_csv(filepath)
-        df = df.loc[df['']]
+        # filepath = self.csv_path('parcels')
+        # df = pd.read_csv(filepath)
+        # df = df.loc[df['']]
+        pass
     
     def tree_equity_score(self):
         
@@ -102,7 +116,12 @@ class Parcel(Neighborhood):
         else:
             pass
         
-    def heat_event_hours(self):
+    def heat_index(self):
+        '''
+
+        grabs heat index from tes data
+
+        '''
         
         self.set_geoid()
         
@@ -111,9 +130,9 @@ class Parcel(Neighborhood):
         df = df.loc[df['GEOID'] == self.geoid]
         df = df.reset_index()
         
-        self.heat_index = df['temp_diff'][0]
+        self.heat_disparity = df['temp_diff'][0]
         
-        return self.heat_index
+        return self.heat_disparity
     
     def trees_added(self):
         pass

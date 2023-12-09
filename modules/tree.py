@@ -51,7 +51,7 @@ class Tree(Parcel):
     def plan_tree(self):
         pass
     
-    def record_tree(self):
+    def record_trees(self):
         # adds to Parcel
         pass
     
