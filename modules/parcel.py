@@ -131,7 +131,7 @@ class Parcel(Neighborhood):
                 return df['tes'].iloc[0]
             
         else:
-            pass
+            return None
     
     def indicate_priority(self):
         '''
@@ -146,7 +146,7 @@ class Parcel(Neighborhood):
             elif self.equity_score >= 70:
                 return False
         else:
-            pass
+            return None
         
     def heat_index(self):
         '''

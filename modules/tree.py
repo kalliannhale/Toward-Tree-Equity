@@ -20,7 +20,7 @@ class Tree(Parcel):
             longitude (abbrv. 'long'), & geoid.
             
     '''
-    def __init__(self, species, maturation, health, last_seen, status=True, district, address):
+    def __init__(self, species, maturation, health, last_seen, address, district, status=True):
         
         super().__init__(district, address)
         
