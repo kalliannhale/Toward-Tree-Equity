@@ -7,8 +7,6 @@ module -- tree.py
     
 """
 
-import geopandas as gpd
-import matplotlib.pyplot as plt
 from parcel import Parcel
 from pygris.geocode import geocode
 
