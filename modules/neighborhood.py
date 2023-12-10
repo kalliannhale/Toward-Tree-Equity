@@ -35,8 +35,17 @@ class Neighborhood:
     
     def dist_data(self, district):
         '''
-        creates a dictionary from district data
+        creates a data frame from district data
         '''
+        
+        df = pd.read_csv(self.csv_path('dist_data'))
+        df = df.loc[district]
+        pass
+    
+    def species_dist(self):
+        pass
+    
+    def heat_index_hours(self):
         pass
     
     def get_parcels(self):
@@ -48,6 +57,9 @@ class Neighborhood:
         '''
         address = parcel.address
         self.parcels[address] = parcel
+        
+    def open_spaces(self, district):
+        pass
     
     def analyze_parcels(self, filepath):
         data['ST_NUM'] = data['ST_NUM'].str.extract('(\d+)')
@@ -57,20 +69,21 @@ class Neighborhood:
             addresses.append(address.lower())
         return pd.DataFrame({'Address': addresses})
     
-    def open_spaces(self, district):
-        pass
-    
     def csv_path(self, topic):
         '''
         stores the filepath in a dictionary
+        
+        will have to change this path
         '''
         filepath = {'equity_score': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/BOS_Tree_Equity_Score.csv',
-                  'parcels': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/parcels.csv',
-                  'geoid_match': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/matching_ids.csv',
+                  'parcels': 'parcels.csv',
+                  'geoid_match': 'matching_ids.csv',
                   'district': None,
-                  'census_block_groups':'/Users/kalliann/Documents/Tree-Equity-Project/data sets/2020_Census_Block_Groups_in_Boston.csv',
-                  'open_spaces':'/Users/kalliann/Documents/Tree-Equity-Project/data sets/open-spaces.csv',
-                  'social_vulnerability': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/social_vulnerability.csv'
+                  'census_block_groups':'2020_Census_Block_Groups_in_Boston.csv',
+                  'open_spaces':'open-spaces.csv',
+                  'social_vulnerability': 'social_vulnerability.csv',
+                  'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp',
+                  'dist_data': ''
             }
         
         return filepath[topic]

@@ -19,7 +19,7 @@ class Parcel(Neighborhood):
     Manages a specific address.
     '''
     
-    unique_parcels = set()
+    unique_parcels = {}
     
     def __init__(self, address, district):
         
@@ -28,9 +28,11 @@ class Parcel(Neighborhood):
         address = address.lower()
         
         if address in Parcel.unique_parcels:
-            raise ValueError(f"Duplicate address found: {address}")
-            
-        Parcel.unique_parcels.add(address)
+            existing_parcel = Parcel.unique_parcels[address]
+            self.__dict__ = existing_parcel.__dict__
+            # accesses __dict__ attribute to copy all existing attribute info at given address to the new instance
+        else:
+            Parcel.unique_parcels[address] = self
         
         try:
             self.geoerror = False
@@ -42,6 +44,7 @@ class Parcel(Neighborhood):
             self.heat_disparity = self.heat_index()
             self.trees = {}
             self.planned = {}
+            self.losses = {}
             # self.land_use = self.findlanduse(address)
         
         except Exception as e:
@@ -111,6 +114,7 @@ class Parcel(Neighborhood):
         if tree.status == True:
             if species not in self.trees:
                 self.trees[tree.species] = [tree]
+                
             self.trees[tree.species].append(tree)
             
         elif tree.status == 'planned':
@@ -118,8 +122,12 @@ class Parcel(Neighborhood):
     
     def remove_tree(self, species):
         
+        if species not in self.losses:
+            self.losses[species] = 0
+        
         for t in self.trees[species]:
             if t.status == False:
+                self.losses[species] += 1
                 self.trees[species].remove(t)
             
     def find_landuse(self, address):
