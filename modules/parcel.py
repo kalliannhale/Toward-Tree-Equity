@@ -36,6 +36,7 @@ class Parcel(Neighborhood):
         
         try:
             self.geoerror = False
+            self.raw_address = address
             self.address = geocode(address)
             self.longitude = self.address.iat[0, 0]
             self.latitude = self.address.iat[0, 1]
@@ -45,7 +46,6 @@ class Parcel(Neighborhood):
             self.trees = {}
             self.planned = {}
             self.losses = {}
-            # self.land_use = self.findlanduse(address)
         
         except Exception as e:
             print()
@@ -130,11 +130,9 @@ class Parcel(Neighborhood):
                 self.losses[species] += 1
                 self.trees[species].remove(t)
             
-    def find_landuse(self, address):
-        # filepath = self.csv_path('parcels')
-        # df = pd.read_csv(filepath)
-        # df = df.loc[df['']]
-        pass
+    def find_land_use(self):
+        land_use = self.landuse(self)
+        return land_use
     
     def tree_equity_score(self):
         
@@ -193,10 +191,10 @@ class Parcel(Neighborhood):
         else:
             return f"About this land parcel...\n" \
                    f" \n"\
+                   f"  Land Use: {self.find_land_use()}\n"\
                    f"  Trees planned: {len(self.planned)}\n"\
                    f"  Equity Score: {self.equity_score}\n" \
                    f"  Heat Disparity: {self.heat_disparity}\n"\
                    f"  Priority Determination: {'Highest Need!' if self.indicate_priority() else 'Need is higher in more vulnerable communities.'}\n" \
                    f" \n"\
                    f"{self.address}\n"
-                   #f"  Land Use: {self.land_use}\n" \

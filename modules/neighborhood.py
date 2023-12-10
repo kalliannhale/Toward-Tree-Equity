@@ -19,7 +19,7 @@ class Neighborhood:
     def __init__(self, district):
         
         self.district = district
-        self.dist_stats = self.dist_data(district)
+        #self.dist_stats = self.dist_data(district)
         self.parcels = {}
         #self.dist_id = ...
     
@@ -27,7 +27,8 @@ class Neighborhood:
         return self.district
     
     def get_dist_stats(self):
-        return self.dist_stats
+       # return self.dist_stats
+       pass
     
     def get_dist_id(self):
         pass
@@ -61,13 +62,30 @@ class Neighborhood:
     def open_spaces(self, district):
         pass
     
-    def analyze_parcels(self, filepath):
+    def official_addresses(self):
+        
+        data = pd.read_csv(self.csv_path('parcels'), low_memory=False)
+        
         data['ST_NUM'] = data['ST_NUM'].str.extract('(\d+)')
         addresses = []
         for index, row in data.iterrows():
-            address = f"{row['ST_NUM']} {row['ST_NAME']}, {row['ST_NAME_SU']}, Boston, MA"
+            address = f"{row['ST_NUM']} {row['ST_NAME']} {row['ST_NAME_SU']}, Boston, MA"
             addresses.append(address.lower())
-        return pd.DataFrame({'Address': addresses})
+            
+        return pd.DataFrame({'ADDRESS': addresses})
+    
+    def landuse(self, parcel):
+        
+        data = pd.read_csv(self.csv_path('parcels'), low_memory=False)
+        
+        df = self.official_addresses()
+        df = df.loc[df['ADDRESS'] == parcel.raw_address]
+        
+        match = df.index[0]
+        
+        land_use = data.loc[df.index[0], 'LU_GENERAL']
+        
+        return land_use
     
     def csv_path(self, topic):
         '''
@@ -76,14 +94,13 @@ class Neighborhood:
         will have to change this path
         '''
         filepath = {'equity_score': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/BOS_Tree_Equity_Score.csv',
-                  'parcels': 'parcels.csv',
-                  'geoid_match': 'matching_ids.csv',
-                  'district': None,
-                  'census_block_groups':'2020_Census_Block_Groups_in_Boston.csv',
+                  'parcels': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/parcels.csv',
+                  'geoid_match': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/matching_ids.csv',
+                  'dist_data': None,
+                  'census_block_groups':'/Users/kalliann/Documents/Tree-Equity-Project/data sets/Census2020_BlockGroups.shp',
                   'open_spaces':'open-spaces.csv',
                   'social_vulnerability': 'social_vulnerability.csv',
-                  'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp',
-                  'dist_data': ''
+                  'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp'
             }
         
         return filepath[topic]
