@@ -48,7 +48,6 @@ class Neighborhood:
         '''
         stores parcels
         '''
-        
         address = parcel.address
         self.parcels[address] = parcel
     

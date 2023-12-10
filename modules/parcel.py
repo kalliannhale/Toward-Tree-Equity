@@ -47,8 +47,10 @@ class Parcel(Neighborhood):
         
         except Exception as e:
             print(f"Geocoding failed for address '{address}': {e}")
-            print("Please format address accordingly: 'number streetname, city, state'")
-            print("Do not include unit numbers.")
+            print("This project is limited to Boston, MA.")
+            print("Please format address accordingly: 'number name street, Boston, MA'")
+            print("Include commas; do not include unit numbers.")
+            print("Spaces & abbreviations such as '100 Wilmer Ave' are acceptable.")
             self.address = address
             self.latitude = None
             self.longitude = None
