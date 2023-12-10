@@ -36,8 +36,8 @@ class Community:
             CREATE TABLE IF NOT EXISTS parcels (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 address TEXT NOT NULL,
-                district_id INTEGER,
-                FOREIGN KEY (district_id) REFERENCES neighborhoods (id)
+                dist_id INTEGER,
+                FOREIGN KEY (dist_id) REFERENCES neighborhoods (id)
             )
         ''')
         # creating Parcel table
@@ -58,57 +58,48 @@ class Community:
 
         self.connection.commit()
 
-    def add_neighborhood(self, district):
-        cursor = self.connection.cursor()
-
-        cursor.execute('SELECT id FROM neighborhoods WHERE district=?', (district,))
-        existing_neighborhood = cursor.fetchone()
-
-        if existing_neighborhood:
-            neighborhood_id = existing_neighborhood[0]
-        else:
-            cursor.execute('INSERT INTO neighborhoods (district) VALUES (?)', (district,))
-            neighborhood_id = cursor.lastrowid
+    def add_neighborhood(self, dist_id):
         
-        # only stores unique districts
-
+        cursor = self.connection.cursor()
+        cursor.execute('INSERT INTO neighborhoods (id) VALUES (?)', (dist_id,))
         self.connection.commit()
-
-        return neighborhood_id
+        
+        return dist_id
         
 
-    def add_parcel(self, address, district_id):
+    def add_parcel(self, address, dist_id):
+       
         cursor = self.connection.cursor()
-        cursor.execute('INSERT INTO parcels (address, district_id) VALUES (?, ?)', (address, district_id))
+        cursor.execute('INSERT INTO parcels (address, dist_id) VALUES (?, ?)', 
+                       (address, dist_id)
+                       )
         self.connection.commit()
 
     def add_tree(self, tree):
         cursor = self.connection.cursor()
-
-        cursor.execute('SELECT id, district_id FROM parcels WHERE address=?', (tree.address,))
+        cursor.execute('SELECT id FROM parcels WHERE address=? AND dist_id=?', 
+                       (tree.address, tree.dist_id)
+                       )
         existing_parcel = cursor.fetchone()
 
         if existing_parcel:
-            parcel_id, district_id = existing_parcel
+            parcel_id = existing_parcel[0]
         else:
-            cursor.execute('INSERT INTO parcels (address, district_id) VALUES (?, ?)', (tree.address, tree.district_id))
+            cursor.execute('INSERT INTO parcels (address, dist_id) VALUES (?, ?)', 
+                           (tree.address, tree.dist_id)
+                           )
             parcel_id = cursor.lastrowid
-            district_id = tree.district_id
-            
-        # only stores unique addresses
-
+    
         cursor.execute('''
             INSERT INTO trees (status, species, maturation, health, last_seen, parcel_id)
             VALUES (?, ?, ?, ?, ?, ?)
         ''', (tree.status, tree.species, tree.maturation, tree.health, tree.last_seen, parcel_id))
-
-        # trees are stored in parcels of the same address
-        
+    
         if existing_parcel:
-            neighborhood_id = district_id
+            neighborhood_id = tree.dist_id
         else:
-            neighborhood_id = self.add_neighborhood(tree.district)
-            tree.parcel = Parcel(tree.address, tree.district)
+            neighborhood_id = tree.dist_id
+            tree.parcel = Parcel(tree.address, tree.district, dist_id=tree.dist_id)
             tree.parcel.add_tree(tree)
-
+    
         self.connection.commit()

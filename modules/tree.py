@@ -30,7 +30,6 @@ class Tree(Parcel):
         self.health = health
         self.address = address
         self.last_seen = last_seen
-        self.status = status
         
     def get_status(self):
         return self.status
