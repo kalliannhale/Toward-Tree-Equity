@@ -17,8 +17,8 @@ import sqlite3
 
 class Community:
     
-    def __init__(self, db_file):
-        self.connection = sqlite3.connect(db_file)
+    def __init__(self, database_file):
+        self.connection = sqlite3.connect(database_file)
         self.create_tables()
 
     def create_tables(self):

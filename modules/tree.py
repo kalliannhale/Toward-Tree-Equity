@@ -20,9 +20,9 @@ class Tree(Parcel):
             longitude (abbrv. 'long'), & geoid.
             
     '''
-    def __init__(self, species, maturation, health, last_seen, district, address, status=True):
+    def __init__(self, species, maturation, health, last_seen, address, district, status=True):
         
-        super().__init__(district, address)
+        super().__init__(address, district)
         
         self.status = status
         self.species = species
@@ -56,6 +56,14 @@ class Tree(Parcel):
         return self.status
     
     def __str__(self):
-        pass
+        return f"About this tree...\n" \
+               f" \n"\
+               f"  Species: {self.species}\n" \
+               f"  Maturation: {self.maturation}\n" \
+               f"  Health: {self.health}\n" \
+               f"  Last Seen: {self.last_seen}\n" \
+               f"  District: {self.get_district()}\n" \
+               f"  Address: {self.get_address()}\n" \
+               f"  Status: {'Planned' if self.status == 'planned' else 'Alive' if self.status else 'Dead'}"
     
     

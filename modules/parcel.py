@@ -43,14 +43,15 @@ class Parcel(Neighborhood):
             self.trees = {}
             self.planned = {}
             # self.land_use = self.findlanduse(address)
-            # self.planned_trees = {}
         
         except Exception as e:
+            print()
             print(f"Geocoding failed for address '{address}': {e}")
+            print()
             print("This project is limited to Boston, MA.")
             print("Please format address accordingly: 'number name street, Boston, MA'")
             print("Include commas; do not include unit numbers.")
-            print("Spaces & abbreviations such as '100 Wilmer Ave' are acceptable.")
+            print("Street abbreviations such as '100 Wilmer Ave, Boston, MA' are acceptable.")
             self.address = address
             self.latitude = None
             self.longitude = None
@@ -79,13 +80,20 @@ class Parcel(Neighborhood):
     def get_equity_score(self):
         return self.equity_score
     
-    def get_heat_index(self):
-        return self.heat_index
+    def get_heat_disparity(self):
+        return self.heat_disparity
+    
+    def get_land_use(self):
+        # return self.land_use
+        pass
     
     def get_trees(self):
         return self.trees
     
-    def plan_tree(self, tree, species):
+    def get_planned(self):
+        return self.planned
+    
+    def planned_trees(self, tree, species):
         
         if species not in self.planned:
             self.planned[species] = [tree]
@@ -169,4 +177,18 @@ class Parcel(Neighborhood):
         return self.heat_disparity
     
     def __str__(self):
-        pass
+        
+        if self.geoerror:
+            return f"Your attempt to record a parcel has created a geocoding error...\n" \
+                   f"  Address: {self.address}\n" 
+                   
+        else:
+            return f"About this land parcel...\n" \
+                   f" \n"\
+                   f"  Trees planned: {len(self.planned)}\n"\
+                   f"  Equity Score: {self.equity_score}\n" \
+                   f"  Heat Disparity: {self.heat_disparity}\n"\
+                   f"  Priority Determination: {'Highest Need!' if self.indicate_priority() else 'Need is higher in more vulnerable communities.'}\n" \
+                   f" \n"\
+                   f"{self.address}\n"
+                   #f"  Land Use: {self.land_use}\n" \

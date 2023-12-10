@@ -28,12 +28,17 @@ class Neighborhood:
         self.district = district
         self.dist_stats = self.dist_data(district)
         self.parcels = {}
+        #self.dist_id = ...
     
     def get_district(self):
         return self.district
     
     def get_dist_stats(self):
         return self.dist_stats
+    
+    def get_dist_id(self):
+        pass
+        #return self.dist_id
     
     def dist_data(self, district):
         '''
