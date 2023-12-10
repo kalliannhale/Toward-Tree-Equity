@@ -18,8 +18,6 @@ class Neighborhood:
     
     def __init__(self, district):
         
-        Neighborhood.used_districts.add(district)
-        
         self.district = district
         self.dist_stats = self.dist_data(district)
         self.parcels = {}

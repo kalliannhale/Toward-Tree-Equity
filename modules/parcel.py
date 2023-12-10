@@ -93,12 +93,12 @@ class Parcel(Neighborhood):
     def get_planned(self):
         return self.planned
     
-    def planned_trees(self, tree, species):
+    def planned_trees(self, tree):
         
-        if species not in self.planned:
-            self.planned[species] = [tree]
+        if tree.species not in self.planned:
+            self.planned[tree.species] = [tree]
         else:
-           self.planned[species].append(tree)
+           self.planned[tree.species].append(tree)
     
     def add_tree(self, tree):
         '''
@@ -110,11 +110,11 @@ class Parcel(Neighborhood):
         
         if tree.status == True:
             if species not in self.trees:
-                self.trees[species] = [tree]
-            self.trees[species].append(tree)
+                self.trees[tree.species] = [tree]
+            self.trees[tree.species].append(tree)
             
         elif tree.status == 'planned':
-            self.plan_tree(tree, species)
+            self.plan_tree(tree, tree.species)
     
     def remove_tree(self, species):
         
