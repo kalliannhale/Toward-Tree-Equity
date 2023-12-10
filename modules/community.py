@@ -96,10 +96,10 @@ class Community:
         ''', (tree.status, tree.species, tree.maturation, tree.health, tree.last_seen, parcel_id))
     
         if existing_parcel:
-            neighborhood_id = tree.dist_id
+            dist_id = tree.dist_id
         else:
-            neighborhood_id = tree.dist_id
-            tree.parcel = Parcel(tree.address, tree.district, dist_id=tree.dist_id)
+            dist_id = tree.dist_id
+            tree.parcel = Parcel(tree.address, tree.district)
             tree.parcel.add_tree(tree)
     
         self.connection.commit()

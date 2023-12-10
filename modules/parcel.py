@@ -111,7 +111,7 @@ class Parcel(Neighborhood):
         if tree.status == True:
             if species not in self.trees:
                 self.trees[species] = [tree]
-            self.tree_dict[species].append(tree)
+            self.trees[species].append(tree)
             
         elif tree.status == 'planned':
             self.plan_tree(tree, species)

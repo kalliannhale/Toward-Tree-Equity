@@ -16,12 +16,7 @@ class Neighborhood:
         priority zone.
     '''
     
-    used_districts = set()
-    
     def __init__(self, district):
-        
-        if district in Neighborhood.used_districts:
-            raise ValueError(f"Duplicate district found: {district}.")
         
         Neighborhood.used_districts.add(district)
         
