@@ -44,7 +44,7 @@ class Parcel(Neighborhood):
             self.equity_score = self.tree_equity_score()
             self.heat_disparity = self.heat_index()
             self.trees = {}
-            self.planned = {}
+            self.planned = []
             self.losses = {}
         
         except Exception as e:
@@ -93,11 +93,7 @@ class Parcel(Neighborhood):
         pass
     
     def planned_trees(self, tree):
-        
-        if tree.species not in self.planned:
-            self.planned[tree.species] = [tree]
-        else:
-           self.planned[tree.species].append(tree)
+        self.planned.append(tree)
     
     def add_tree(self, tree):
         '''

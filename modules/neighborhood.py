@@ -33,10 +33,16 @@ class Neighborhood:
         pass
         #return self.dist_id
         
-    def dist_id(self, district):
+     def get_parcels(self):
+         return self.parcels
+        
+    def find_dist_id(self, district):
         pass
     
-    def dist_data(self, district):
+    def open_spaces(self, district):
+        pass
+    
+    def read_dist_data(self, district):
         '''
         creates a data frame from district data
         '''
@@ -45,8 +51,10 @@ class Neighborhood:
         df = df.loc[district]
         pass
     
-    def get_parcels(self):
-        return self.parcels
+    def species_distribution(self):
+        
+        df = pd.read_csv(self.csv_path('dist_data'))
+        pass
     
     def store_parcel(self, parcel):
         '''
@@ -54,9 +62,6 @@ class Neighborhood:
         '''
         address = parcel.address
         self.parcels[address] = parcel
-        
-    def open_spaces(self, district):
-        pass
     
     def official_addresses(self):
         
