@@ -13,7 +13,7 @@ from tree import Tree
 
 def main():
     
-    cdb = "community_database.db"  # Replace with your actual database file name
+    cdb = "community_database.db"
     community = Community(cdb)
 
     while True:
@@ -21,9 +21,9 @@ def main():
         print("1. Plan a Tree")
         print("2. Record Existing/Planted Tree")
         print("3. Report Tree Loss")
-        print("4. View Canopy Trends")
-        print("5. Priority")
-        print("6. Analyze Land Use")
+        print("4. Analyze Land Use")
+        print("5. Access Information")
+        print("6. Determine Priority")
         print("7. Exit")
 
         choice = input("Enter your choice (1-7): ")

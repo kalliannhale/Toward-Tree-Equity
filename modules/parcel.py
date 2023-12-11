@@ -92,7 +92,7 @@ class Parcel(Neighborhood):
     def geocode_failure(self):
         pass
     
-    def plan_trees(self, tree):
+    def planned_trees(self, tree):
         
         if tree.species not in self.planned:
             self.planned[tree.species] = [tree]

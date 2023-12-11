@@ -21,8 +21,7 @@ class Neighborhood:
         self.district = district
         #self.dist_stats = self.dist_data(district)
         self.parcels = {}
-        #self.dist_id = ...
-    
+        
     def get_district(self):
         return self.district
     
@@ -33,6 +32,9 @@ class Neighborhood:
     def get_dist_id(self):
         pass
         #return self.dist_id
+        
+    def dist_id(self, district):
+        pass
     
     def dist_data(self, district):
         '''
@@ -41,15 +43,6 @@ class Neighborhood:
         
         df = pd.read_csv(self.csv_path('dist_data'))
         df = df.loc[district]
-        pass
-    
-    def species_dist(self):
-        pass
-    
-    def genus_dist(self):
-        pass
-    
-    def age_dist(self):
         pass
     
     def get_parcels(self):
@@ -107,6 +100,7 @@ class Neighborhood:
                   'open_spaces':'open-spaces.csv',
                   'social_vulnerability': 'social_vulnerability.csv',
                   'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp'
+                  'dist_ids': ''
             }
         
         return filepath[topic]
