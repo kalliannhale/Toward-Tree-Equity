@@ -9,7 +9,7 @@ module -- parcel.py
         equitable resource distribution.
         
 """
-
+import os
 import pandas as pd
 from neighborhood import Neighborhood
 from pygris.geocode import geocode
@@ -126,12 +126,20 @@ class Parcel(Neighborhood):
         land_use = self.landuse(self)
         return land_use
     
+    def open_spaces(self):
+        pathway = os.path.join(os.path.dirname(__file__), 'open_spaces.csv')
+        
+        if self.raw_address in open_spac
+    
     def tree_equity_score(self):
+        
+        current_directory = os.getcwd()
+        pathway = os.path.join(current_directory, 'BOS_Tree_Equity_Score.csv')
+        pd.read_csv(pathway)
         
         if self.geoerror == False:
             
-            filepath = self.csv_path('equity_score')
-            df = pd.read_csv(filepath)
+            df = pd.read_csv()
             df = df.loc[df['GEOID'] == float(int(self.geoid/10**3))]
             # matching up geoid across csv files
             
