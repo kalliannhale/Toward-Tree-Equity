@@ -239,6 +239,11 @@ class Neighborhood:
 
       # Optionally return the matching IDs
       return matching_ids
+
+    def is_address_in_open_spaces(self, address: str) -> bool:
+        open_spaces_df = pd.read_csv(self.csv_path('open_spaces'))
+        is_in_open_spaces = address.lower() in open_spaces_df['ADDRESS'].str.lower().values
+        return is_in_open_spaces
   
     def __str__(self):
         pass
