@@ -64,29 +64,29 @@ class Neighborhood:
         """
         data = self.dist_data()
         district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data[['GROWTH', 'LOSS']].sum()
+        agg_data = district_data[['GROWTH', 'LOSS']].sum()
         
         plt.figure(figsize=(8, 6))
-        plt.bar(['Growth', 'Loss'], aggregated_data.values, color=['green', 'red'])
+        plt.bar(['Growth', 'Loss'], agg_data.values, color=['green', 'red'])
         plt.xlabel('Outcome')
         plt.ylabel('Acres')
-        plt.title(f'Growth and Loss for District ID {dist_id}')
+        plt.title(f'Growth and Loss for District ID {self.dist_id}')
         plt.show()
 
-    def plot_age_dist(self, dist_id):
+    def plot_age_dist(self):
         """
         Plots the age distribution for a given district ID.
         """
         data = self.dist_data()
         district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data['AGE_DIST'].apply(eval).apply(pd.Series).sum()
-        aggregated_data *= 100
+        agg_data = district_data['AGE_DIST'].apply(eval).apply(pd.Series).sum()
+        agg_data *= 100
         
         plt.figure(figsize=(10, 6))
-        aggregated_data.plot(kind='bar', color='orange')
+        agg_data.plot(kind='bar', color='orange')
         plt.xlabel('Age Distribution')
         plt.ylabel('Percentage')
-        plt.title(f'Age Distribution for District ID {dist_id}')
+        plt.title(f'Age Distribution for District ID {self.dist_id}')
         plt.show()
 
     def plot_genus_dist(self, dist_id):
@@ -95,14 +95,14 @@ class Neighborhood:
         """
         data = self.dist_data()
         district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data['GENUS_DIST'].apply(eval).apply(pd.Series).sum()
-        aggregated_data *= 100
+        agg_data = district_data['GENUS_DIST'].apply(eval).apply(pd.Series).sum()
+        agg_data *= 100
         
         plt.figure(figsize=(12, 8))
-        aggregated_data.plot(kind='bar', color='purple')
+        agg_data.plot(kind='bar', color='purple')
         plt.xlabel('Genus Distribution')
         plt.ylabel('Percentage')
-        plt.title(f'Genus Distribution for District ID {dist_id}')
+        plt.title(f'Genus Distribution for District ID {self.dist_id}')
         plt.show()
         
     def plot_species_dist(self, dist_id):
@@ -111,14 +111,14 @@ class Neighborhood:
         """
         data = self.dist_data()
         district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data['SPEC_DIST'].apply(eval).apply(pd.Series).sum()
-        aggregated_data *= 100
+        agg_data = district_data['SPEC_DIST'].apply(eval).apply(pd.Series).sum()
+        agg_data *= 100
         
         plt.figure(figsize=(12, 8))
-        aggregated_data.plot(kind='bar', color='skyblue')
+        agg_data.plot(kind='bar', color='skyblue')
         plt.xlabel('Species')
         plt.ylabel('Percentage')
-        plt.title(f'Species Distribution for District ID {dist_id}')
+        plt.title(f'Species Distribution for District ID {self.dist_id}')
         plt.show()
         
         # if percent_species > 0.1, recommend against
