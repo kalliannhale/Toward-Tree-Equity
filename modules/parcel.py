@@ -51,10 +51,7 @@ class Parcel(Neighborhood):
             print()
             print(f"Geocoding failed for address '{address}': {e}")
             print()
-            print("This project is limited to Boston, MA.")
-            print("Please format address accordingly: 'number name street, Boston, MA'")
-            print("Include commas; do not include unit numbers.")
-            print("Street abbreviations such as '100 Wilmer Ave, Boston, MA' are acceptable.")
+            
             self.address = address
             self.latitude = None
             self.longitude = None
@@ -86,17 +83,16 @@ class Parcel(Neighborhood):
     def get_heat_disparity(self):
         return self.heat_disparity
     
-    def get_land_use(self):
-        # return self.land_use
-        pass
-    
     def get_trees(self):
         return self.trees
     
     def get_planned(self):
         return self.planned
     
-    def planned_trees(self, tree):
+    def geocode_failure(self):
+        pass
+    
+    def plan_trees(self, tree):
         
         if tree.species not in self.planned:
             self.planned[tree.species] = [tree]

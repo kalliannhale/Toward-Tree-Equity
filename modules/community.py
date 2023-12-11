@@ -56,7 +56,31 @@ class Community:
         ''')
         # creating Tree table
 
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                affiliation TEXT NOT NULL,
+                entry_date TEXT NOT NULL
+            )
+        ''')
+
         self.connection.commit()
+    
+    def add_user(self, user_name, affiliation):
+        if user_name and affiliation:
+            
+            entry_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            cursor = self.connection.cursor()
+            cursor.execute('INSERT INTO users (name, affiliation, entry_date) VALUES (?, ?, ?)',
+                           (user_name, affiliation, entry_date))
+            self.connection.commit()
+
+    def get_user_info(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT name, affiliation, entry_date FROM users ORDER BY entry_date DESC LIMIT 1')
+        user_info = cursor.fetchone()
+        return user_info
 
     def add_neighborhood(self, dist_id):
         

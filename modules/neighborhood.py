@@ -46,7 +46,10 @@ class Neighborhood:
     def species_dist(self):
         pass
     
-    def heat_index_hours(self):
+    def genus_dist(self):
+        pass
+    
+    def age_dist(self):
         pass
     
     def get_parcels(self):
@@ -81,9 +84,12 @@ class Neighborhood:
         df = self.official_addresses()
         df = df.loc[df['ADDRESS'] == parcel.raw_address]
         
-        match = df.index[0]
+        if not df.empty:
+            match = df.index[0]
+            land_use = data.loc[df.index[0], 'LU_GENERAL']
         
-        land_use = data.loc[df.index[0], 'LU_GENERAL']
+        else:
+            land_use = 'Not Found'
         
         return land_use
     

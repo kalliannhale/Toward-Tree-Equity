@@ -4,23 +4,19 @@
 test methods of the Tree class
 '''
 
+from tree import Tree
+
 import unittest
 
 class TestTree(unittest.TestCase):
     
-    def test_get_status(self):
+    def setup(self):
         pass
     
-    def test_get_species(self):
+    def test_constructor(self):
         pass
     
-    def test_get_maturation(self):
-        pass
-    
-    def test_get_health(self):
-        pass
-    
-    def test_get_last_seen(self):
+    def test_retrieval_methods(self):
         pass
     
     def test_plan_tree(self):
