@@ -99,7 +99,7 @@ class Neighborhood:
                   'census_block_groups':'/Users/kalliann/Documents/Tree-Equity-Project/data sets/Census2020_BlockGroups.shp',
                   'open_spaces':'open-spaces.csv',
                   'social_vulnerability': 'social_vulnerability.csv',
-                  'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp'
+                  'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp',
                   'dist_ids': ''
             }
         

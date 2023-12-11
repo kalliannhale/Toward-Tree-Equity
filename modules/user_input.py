@@ -15,21 +15,31 @@ district_ids = {'allston': 1, 'allston-brighton': 1, 'allston brighton': 1,
                 'south boston':16, 'south end': 17, 'west roxbury': 18
                 }
 
-districts = ['Allston-Brighton', 'Back-Bay', 'Beacon Hill', 
-             'Charlestown', 'Central', 'Dorchester',
-             'East Boston', 'Fenway', 'Longwood', 
-             'Hyde Park', 'Jamaica Plain', 'Mattapan'
-             'Mission Hill', 'Roslindale', 'Roxbury',
-             'South Boston', 'South End', 'West Roxbury'
-    ]
+def area_of_interest():
+    
+    districts = ['Allston-Brighton', 'Back-Bay', 'Beacon Hill', 
+                 'Charlestown', 'Central', 'Dorchester',
+                 'East Boston', 'Fenway', 'Longwood', 
+                 'Hyde Park', 'Jamaica Plain', 'Mattapan'
+                 'Mission Hill', 'Roslindale', 'Roxbury',
+                 'South Boston', 'South End', 'West Roxbury'
+        ]
+    
+    d = input("Type the name of the neighborhood you're interested in:")
+    print()
+    for dist in districts:
+        print(d)
+    
+    return d
 
 def plan_tree():
     '''
     facilitates planning a tree
 
     '''
-    dist_id = input("What neighborhood are you interested in?")
+    disrict = input("What neighborhood are you interested in? ")
     
-    neighborhood_instance = Neighborhood(dist_id)
-    community.add_neighborhood(neighborhood_instance)
-
+    print()
+    
+    for d in districts:
+        print(d)
