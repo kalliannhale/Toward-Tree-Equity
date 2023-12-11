@@ -6,6 +6,8 @@ Created on Sun Dec 10 21:32:52 2023
 @author: kalliann
 """
 
+from pygris.geocode import geocode
+
 district_ids = {'allston brighton': 1, 'back bay': 2, 'beacon hill': 3, 
                 'charlestown': 4, 'central': 5, 'dorchester': 6, 
                 'east boston': 7, 'fenway': 8, 'longwood': 8, 
@@ -84,7 +86,6 @@ def maturation():
         m = input("Type one of the above: ")
         
     print()
-        
     print("Got it, thanks!")
         
     return m.lower()
@@ -93,4 +94,41 @@ def health():
     
     health = ['good', 'poor']
     
-    h = input("")
+    print("Tree Health:")
+    print()
+    print("Unless your tree is on the decline, indicate 'good' for good health.")
+    print("If your tree is clearly declining, indicate 'poor.'")
+    print()
+    
+    h = input("Is your tree's health good or poor? ")
+    
+    while h.lower() not in health:
+        print()
+        for h in health:
+            print(h)
+        print()
+        h = input("Type one of the above: ")
+        
+    print()
+    print("Got it, thanks!")
+    
+    return h
+
+def address():
+    
+    print('Where are you planting this tree?')
+
+    a = input('Enter address: ')
+    
+    try:
+        b = geocode(a)
+        return a
+    
+    except Exception as e:
+        print()
+        print(f"Geocoding failed for address '{address}': {e}")
+        print()
+    
+        print('Please format addresses accordingly: "number name street, Boston, MA"')
+        print('Make sure to include commas; do not include unit numbers.')
+        print("Street abbreviations such as the example 100 Wilmer Ave, Boston, MA' are acceptable.")
