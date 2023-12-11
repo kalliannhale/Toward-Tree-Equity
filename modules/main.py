@@ -7,14 +7,20 @@ Created on Sun Dec 10 20:54:33 2023
 """
 
 from community import Community
-from neighborhood import Neighborhood
 from parcel import Parcel
 from tree import Tree
+from user_input import user_info, species, area_of_interest, maturation, health, last_seen, address
+from neighborhood import Neighborhood
 
 def main():
     
     cdb = "community_database.db"
     community = Community(cdb)
+    
+    user_name, affiliation = user_info()
+    community.add_user(user_name, affiliation)
+    community.get_user_info
+    print()
 
     while True:
         print("\n=== Boston Urban Forestry Accountability Mapping Tool ===")
@@ -30,42 +36,85 @@ def main():
 
         if choice == "1":
             
-            pass
-
+            # Call the user input functions and assign the returned values
+            print()
+            d = area_of_interest()
+            print()
+            s = species()
+            print()
+            m = maturation()
+            print()
+            h = health()
+            print()
+            l = 0000-00-00
+            print()
+            a = address()
+            
+            nbhd = Neighborhood(a)
+            
+            x = species_dist(nbhd.dist_id)
+            
+            if s in x and s > 0.1:
+                print("This species currently exceeds the recommended limit in this area.")
+            
+            parcel = Parcel(a, d)
+            tree = Tree(s, m, h, l, a, d, status='planned')
+            
+            community.add_tree(tree)
+            print("Tree planned successfully!")
+            
         elif choice == "2":
-            address = input("Enter parcel address: ")
-            dist_id = input("Enter district ID: ")
-            parcel = Parcel(address, dist_id)
-            community.add_parcel(parcel_instance)
-            print("Parcel added successfully!")
+            print()
+            s = species()
+            print()
+            m = maturation()
+            print()
+            h = health()
+            print()
+            l = last_seen()
+            print()
+            a = address()
+            print()
+            d = area_of_interest()
+            
+            parcel = Parcel(a, d)
+            tree = Tree(s, m, h, l, a, d)
+            
+            community.add_tree(tree)
 
         elif choice == "3":
-            species = input("Enter tree species: ")
-            maturation = input("Enter tree maturation: ")
-            health = input("Enter tree health: ")
-            last_seen = input("Enter last seen date: ")
-            address = input("Enter tree address: ")
-            dist_id = input("Enter district ID: ")
-
-            tree = Tree(species, maturation, health, last_seen, address, dist_id)
+            pass
+            # print()
+            # s = species()
+            # print()
+            # m = maturation()
+            # print()
+            # h = health()
+            # print()
+            # l = last_seen()
+            # print()
+            # a = address()
+            # print()
+            # d = area_of_interest()
             
-            community.add_tree(tree_instance)
-            print("Tree added successfully!")
+            # parcel = Parcel(a, d)
+            # tree = Tree(s, m, h, l, a, d, status='planned')
+            
+            # community.add_tree(tree)
 
         elif choice == "4":
             print("\n=== View Canopy Trends ===")
-            # Implement functionality to view canopy trends
-            # Example: community.view_canopy_trends()
+            # implement visualizations
 
         elif choice == "5":
             print("\n=== Prioritize Environmental Justice Communities ===")
-            # Implement functionality to prioritize environmental justice communities
-            # Example: community.prioritize_ej_communities()
+            # determine priority
+
 
         elif choice == "6":
             print("\n=== Analyze Land Use ===")
-            # Implement functionality to analyze land use
-            # Example: community.analyze_land_use()
+            # analyze trends / access data
+
 
         elif choice == "7":
             print("Exiting program.")

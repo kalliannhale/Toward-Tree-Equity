@@ -13,6 +13,30 @@ def user_info():
     affiliation = input("Enter your organizational affiliation: ")
     return user_name, affiliation
 
+def species():
+    
+    sp = ['littleleaf linden', 'norway maple', 'crabapple spp',
+               'hedge maple', 'red maple', 'green ash', 'japanese zelkova', 
+               'norther red oak', 'japanese tree lilac', 'american sycamore',
+               'honeylocust', 'pin oak', 'sweetgum', 'london planetree', 
+               'ginko', 'american elm', 'kwanzan cherry', 'accolade elm',
+               'other', 'not sure'
+               ]
+    
+    s = input("What species are you interested in? ")
+    
+    while s.lower().strip() not in sp:
+        print()
+        for x in sp:
+            print(x)
+        print()
+        s = input("Please choose from one of the above: ")
+        
+    print("Got it, thanks!")
+    print()
+        
+    return s.lower().strip()
+
 def area_of_interest():
     
     districts = ['allston brighton', 'back bay', 'beacon hill', 
@@ -25,7 +49,7 @@ def area_of_interest():
     
     r = input("Type the name of the neighborhood you're interested in: ")
     
-    while r.lower() not in districts:
+    while r.lower().strip() not in districts:
         print()
         for d in districts:
             print(d)
@@ -34,31 +58,9 @@ def area_of_interest():
     
     print()
     print("Got it, thanks!")
+    print()
     
-    return r.lower()
-
-def species():
-    
-    species = ['littleleaf linden', 'norway maple', 'crabapple spp',
-               'hedge maple', 'red maple', 'green ash', 'japanese zelkova', 
-               'norther red oak', 'japanese tree lilac', 'american sycamore',
-               'honeylocust', 'pin oak', 'sweetgum', 'london planetree', 
-               'ginko', 'american elm', 'kwanzan cherry', 'accolade elm',
-               'other', 'not sure'
-               ]
-    
-    s = input("What species are you interested in? ")
-    
-    while s.lower() not in species:
-        print()
-        for x in species:
-            print(x)
-        print()
-        s = input("Please choose from one of the above: ")
-        
-    print("Got it, thanks!")
-        
-    return s.lower()
+    return r.lower().strip()
 
 def maturation():
     
@@ -66,16 +68,17 @@ def maturation():
     
     print("Identify the maturation of your tree:")
     print()
-    print("seedling - just planted")
+    print("seedling - just planted/less than 1")
     print("young - less than 6 years old")
     print("establishing - less than 18 years old")
     print("maturing - less than 24 years old")
     print("mature - 25 years or older")
     print()
+    print('None')
     
     m = input("How old is your tree? ")
     
-    while m.lower() not in maturation:
+    while m.lower().strip() not in maturation:
         print()
         for x in maturation:
             print(x)
@@ -84,8 +87,9 @@ def maturation():
         
     print()
     print("Got it, thanks!")
+    print()
         
-    return m.lower()
+    return m.lower().strip()
 
 def health():
     
@@ -99,7 +103,7 @@ def health():
     
     h = input("Is your tree's health good or poor? ")
     
-    while h.lower() not in health:
+    while h.lower().strip() not in health:
         print()
         for h in health:
             print(h)
@@ -108,8 +112,9 @@ def health():
         
     print()
     print("Got it, thanks!")
+    print()
     
-    return h
+    return h.lower().strip()
 
 def address():
     
@@ -142,4 +147,16 @@ def address():
                 print('Geocoding is not possible at this address.')
                 print('Some features of analysis may not be available.')
                 print(f"The address you've entered is: {a}.")
-                return a
+                
+                return a.lower().strip()
+            
+def last_seen():
+    
+    date = input("When did you record this tree? "\
+                 "Use the following format: YYYY-MM-DD)"
+                 )
+    print()
+    print("Got it, thanks!")
+    print()
+    
+    return date

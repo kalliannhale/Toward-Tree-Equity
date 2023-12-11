@@ -9,9 +9,8 @@ module -- community.py
         
 """
 
-from neighborhood import Neighborhood
 from parcel import Parcel
-from tree import Tree
+from datetime import datetime 
 
 import sqlite3
 
@@ -125,5 +124,6 @@ class Community:
             dist_id = tree.dist_id
             tree.parcel = Parcel(tree.address, tree.district)
             tree.parcel.add_tree(tree)
+            self.add_parcel(tree.address, tree.dist_id)
     
         self.connection.commit()

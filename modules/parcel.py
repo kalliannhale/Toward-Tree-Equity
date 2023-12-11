@@ -127,9 +127,7 @@ class Parcel(Neighborhood):
         return land_use
     
     def open_spaces(self):
-        pathway = os.path.join(os.path.dirname(__file__), 'open_spaces.csv')
-        
-        if self.raw_address in open_spac
+        pass
     
     def tree_equity_score(self):
         

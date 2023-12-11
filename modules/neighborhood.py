@@ -50,7 +50,7 @@ class Neighborhood:
         else:
             raise ValueError("This district does not exist.")
     
-    def read_dist_data(self):
+    def dist_data(self):
         """
         Reads the district data from the 'district_data_v.csv' file.
         """
@@ -241,4 +241,8 @@ class Neighborhood:
       return matching_ids
   
     def __str__(self):
-        pass
+        return (
+            f"Neighborhood: {self.district}\n"
+            f"District ID: {self.dist_id}\n"
+            f"Number of Parcels: {len(self.parcels)}"
+        )
