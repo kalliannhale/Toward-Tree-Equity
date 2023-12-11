@@ -162,22 +162,26 @@ class Parcel(Neighborhood):
         grabs heat index from tes data
 
         '''
+        if self.geoerror == False:
+            self.set_geoid()
+            
+            filepath = self.csv_path('equity_score')
+            df = pd.read_csv(filepath)
+            df = df.loc[df['GEOID'] == self.geoid]
+            df = df.reset_index()
+            
+            self.heat_disparity = df['temp_diff'][0]
         
-        self.set_geoid()
+            return self.heat_disparity
         
-        filepath = self.csv_path('equity_score')
-        df = pd.read_csv(filepath)
-        df = df.loc[df['GEOID'] == self.geoid]
-        df = df.reset_index()
-        
-        self.heat_disparity = df['temp_diff'][0]
-        
-        return self.heat_disparity
+        else:
+            return None
     
     def __str__(self):
         
         if self.geoerror:
             return f"Your attempt to record a parcel has created a geocoding error...\n" \
+                   f'Some methods of analysis are not available.'\
                    f"  Address: {self.address}\n" 
                    
         else:

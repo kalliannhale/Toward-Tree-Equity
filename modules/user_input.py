@@ -116,19 +116,34 @@ def health():
 
 def address():
     
-    print('Where are you planting this tree?')
-
-    a = input('Enter address: ')
+    for attempt in range(4):
+        
+        print('Where are you planting this tree?')
+        a = input('Enter address: ')
     
-    try:
-        b = geocode(a)
-        return a
-    
-    except Exception as e:
-        print()
-        print(f"Geocoding failed for address '{address}': {e}")
-        print()
-    
-        print('Please format addresses accordingly: "number name street, Boston, MA"')
-        print('Make sure to include commas; do not include unit numbers.')
-        print("Street abbreviations such as the example 100 Wilmer Ave, Boston, MA' are acceptable.")
+        try:
+            geocode(a)
+            return a
+        
+        except Exception as e:
+            print()
+            print(f"Geocoding failed for address '{address}': {e}")
+            print()
+        
+            print('Please format addresses accordingly:')
+            print("100 Wilmer Ave, Boston, MA")
+            print('Make sure to include commas; do not include unit numbers.')
+            print()
+            
+            if attempt < 2:
+                print("Please try again.")
+                print()
+            elif attempt == 2:
+                print("This is your last attempt.")
+                print()
+            else:
+                print('Geocoding is not possible at this address.')
+                print('Some features of analysis may not be available.')
+                print(f"The address you've entered is: {a}.")
+                return a
+            
