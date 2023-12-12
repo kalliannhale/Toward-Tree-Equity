@@ -13,6 +13,21 @@ def user_info():
     affiliation = input("Enter your organizational affiliation: ")
     return user_name, affiliation
 
+def yes_no():
+    
+    while True:
+        
+        user_input = input("Type 'Y' for yes or 'N' for no: ").upper()
+        print()
+        
+        if user_input.lower().strip() == 'y' or user_input.lower.strip() == 'n':
+            print("Got it, thanks!")
+            return answer.lower().strip()
+        
+        else:
+            print("Invalid input. Please type 'Y' for yes or 'N' for no.")
+            print()
+
 def species():
     
     sp = ['littleleaf linden', 'norway maple', 'crabapple spp',

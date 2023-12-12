@@ -19,51 +19,72 @@ def main():
     
     user_name, affiliation = user_info()
     community.add_user(user_name, affiliation)
-    community.get_user_info
+    community.get_user_info()
     print()
 
     while True:
-        print("\n=== Boston Urban Forestry Accountability Mapping Tool ===")
-        print("1. Plan a Tree")
-        print("2. Record Existing/Planted Tree")
-        print("3. Report Tree Loss")
-        print("4. Analyze Land Use")
-        print("5. Access Information")
-        print("6. Determine Priority")
-        print("7. Exit")
+        print("\n=== Toward Tree Equity: An Accountability Mapping Tool ===")
+        print("1. Visualize Need")
+        print("2. Plan a Tree")
+        print("3. Record Existing/Planted Tree")
+        print("4. Report Tree Loss/Declining Health")
+        print("5. View Volunteer Data")
+        print("6. Exit")
 
         choice = input("Enter your choice (1-7): ")
 
         if choice == "1":
+            print("\n=== Visualize Need ===")
             
-            # Call the user input functions and assign the returned values
+            
+        elif choice == "2":
+            print("\n=== Plan a Tree ===")
+            
             print()
             d = area_of_interest()
             print()
-            s = species()
-            print()
+            nbhd = Neighborhood(d)
+            print(nbhd)
+            
+            a = address()
+            parcel = Parcel(a, d)
+            print(parcel)
+            
             m = maturation()
             print()
-            h = health()
-            print()
+            h = 'good'
             l = 0000-00-00
+            
+            s = species()
+            print()
+            
+            tree = Tree(s, m, h, l, a, d, status='planned')
+            if tree.biodiversity:
+                print("The concentration of this species is already too high in this neighbhorhood.")
+                print()
+            if tree.heat_vuln() and parcel.too_hot():
+                print("This species is vulnerable to extreme heat.")
+                print("This block experiences high heat.")
+                print()
+            
+            print("Would you like to record this plan?")
+            answer = yes_no()
+            
+            if answer == 'y':
+                tree.plan_tree()
+                parcel.planned_trees(tree)
+                nbhd.store_parcel()
+                community.add_neighborhood()
+                community.add_tree()
+            print("Tree planned successfully!")
+
+        elif choice == "3":
+            print("\n=== Record Existing/Planted Tree ===")
+            
+            print()
+            d = area_of_interest()
             print()
             a = address()
-            
-            nbhd = Neighborhood(a)
-            
-            x = species_dist(nbhd.dist_id)
-            
-            if s in x and s > 0.1:
-                print("This species currently exceeds the recommended limit in this area.")
-            
-            parcel = Parcel(a, d)
-            tree = Tree(s, m, h, l, a, d, status='planned')
-            
-            community.add_tree(tree)
-            print("Tree planned successfully!")
-            
-        elif choice == "2":
             print()
             s = species()
             print()
@@ -73,50 +94,56 @@ def main():
             print()
             l = last_seen()
             print()
-            a = address()
-            print()
-            d = area_of_interest()
             
+            nbhd = Neighborhood(d)
             parcel = Parcel(a, d)
             tree = Tree(s, m, h, l, a, d)
             
+            nbhd.store_parcel(parcel)
+            parcel.add_tree(tree)
+            
             community.add_tree(tree)
-
-        elif choice == "3":
-            pass
-            # print()
-            # s = species()
-            # print()
-            # m = maturation()
-            # print()
-            # h = health()
-            # print()
-            # l = last_seen()
-            # print()
-            # a = address()
-            # print()
-            # d = area_of_interest()
+            community.add_neighborhood(nbhd.dist_id)
             
-            # parcel = Parcel(a, d)
-            # tree = Tree(s, m, h, l, a, d, status='planned')
-            
-            # community.add_tree(tree)
+            print("Tree successfully recorded.")
 
         elif choice == "4":
-            print("\n=== View Canopy Trends ===")
-            # implement visualizations
+            print("\n=== Report Tree Loss/Declining Health ===")
+            
+            print()
+            d = area_of_interest()
+            print()
+            a = address()
+            print()
+            s = species()
+            print()
+            m = maturation()
+            print()
 
+            print(Has this tree died?)
+            print()
+            answer = yes_no()
+            
+            parcel = Parcel(a, d)
+            
+            if answer == 'y':
+                status = False
+                parcel.tree_loss(s, m, a)
+                community.remove_tree(s, m, a)
+                
+            if answer == 'n':
+                parcel.decline(s, m, a)
+            
+            print("Thank you for reporting.")
+            
         elif choice == "5":
-            print("\n=== Prioritize Environmental Justice Communities ===")
-            # determine priority
-
+            print("\n=== View Volunteer Data ===")
+            # should gracefully print the number of trees planted in priority neighborhoods
+            # should gracefully display/print trees added to community database
+            # should gracefully print tree losses
+            
 
         elif choice == "6":
-            print("\n=== Analyze Land Use ===")
-            # analyze trends / access data
-
-
-        elif choice == "7":
             print("Exiting program.")
             break
 

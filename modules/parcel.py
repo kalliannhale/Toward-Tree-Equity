@@ -89,9 +89,6 @@ class Parcel(Neighborhood):
     def get_planned(self):
         return self.planned
     
-    def geocode_failure(self):
-        pass
-    
     def planned_trees(self, tree):
         self.planned.append(tree)
     
@@ -112,32 +109,47 @@ class Parcel(Neighborhood):
         elif tree.status == 'planned':
             self.plan_tree(tree, tree.species)
     
-    def remove_tree(self, species):
+    def tree_loss(self, species, maturation, address):
         
         if species not in self.losses:
             self.losses[species] = 0
         
         for t in self.trees[species]:
-            if t.status == False:
+            if t.species == species and t.maturation == maturation and t.address == address:
+                t.status = False
                 self.losses[species] += 1
-                self.trees[species].remove(t)
+                break
+    
+    def decline(self, species, maturation, address):
+        
+        for t in self.trees[species]:
+            if t.species == species and t.maturation == maturation and t.address == address:
+                t.health = 'poor'
+                break
             
     def find_land_use(self):
         land_use = self.landuse(self)
         return land_use
     
     def open_spaces(self):
-        pass
+        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/open_spaces_real.csv'
+        df = pd.read_csv(pathway)
+        # Check if the address is present in the "ADDRESS" column
+        match_found = any(df['ADDRESS'] == self.address)
+        
+        if match_found is not None:
+            return True
+        else:
+            return False
     
     def tree_equity_score(self):
         
-        current_directory = os.getcwd()
-        pathway = os.path.join(current_directory, 'BOS_Tree_Equity_Score.csv')
+        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/BOS_Tree_Equity_Score.csv'
         pd.read_csv(pathway)
         
         if self.geoerror == False:
             
-            df = pd.read_csv()
+            df = pd.read_csv(pathway)
             df = df.loc[df['GEOID'] == float(int(self.geoid/10**3))]
             # matching up geoid across csv files
             
@@ -171,17 +183,24 @@ class Parcel(Neighborhood):
         if self.geoerror == False:
             self.set_geoid()
             
-            filepath = self.csv_path('equity_score')
-            df = pd.read_csv(filepath)
+            pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/BOS_Tree_Equity_Score.csv'
+            df = pd.read_csv(pathway)
             df = df.loc[df['GEOID'] == self.geoid]
             df = df.reset_index()
             
-            self.heat_disparity = df['temp_diff'][0]
+            heat_disparity = df['temp_diff'][0]
         
-            return self.heat_disparity
+            return heat_disparity
         
         else:
             return None
+        
+    def too_hot(self):
+        
+        if self.heat_disparity > 20:
+            return True
+        else:
+            return False
     
     def __str__(self):
         
@@ -194,6 +213,7 @@ class Parcel(Neighborhood):
             return f"About this land parcel...\n" \
                    f" \n"\
                    f"  Land Use: {self.find_land_use()}\n"\
+                   f"  {'This is an open space!' if self.open_spaces() else ''}\n"\
                    f"  Trees planned: {len(self.planned)}\n"\
                    f"  Equity Score: {self.equity_score}\n" \
                    f"  Heat Disparity: {self.heat_disparity}\n"\

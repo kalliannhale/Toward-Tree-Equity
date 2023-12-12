@@ -82,21 +82,43 @@ class Community:
         return user_info
 
     def add_neighborhood(self, dist_id):
-        
         cursor = self.connection.cursor()
-        cursor.execute('INSERT INTO neighborhoods (id) VALUES (?)', (dist_id,))
-        self.connection.commit()
-        
-        return dist_id
-        
+
+        cursor.execute('SELECT id FROM neighborhoods WHERE id=?', (dist_id,))
+        existing_neighborhood = cursor.fetchone()
+        # searches for neighborhoods with the given dist_id
+
+        if existing_neighborhood:
+            return existing_neighborhood[0]
+            # if it exists, return the id
+        else:
+            # Neighborhood doesn't exist, add a new neighborhood
+            cursor.execute('INSERT INTO neighborhoods (id) VALUES (?)', (dist_id,))
+            self.connection.commit()
+
+            # Return the newly added neighborhood's id
+            return cursor.lastrowid
 
     def add_parcel(self, address, dist_id):
-       
         cursor = self.connection.cursor()
-        cursor.execute('INSERT INTO parcels (address, dist_id) VALUES (?, ?)', 
-                       (address, dist_id)
-                       )
+
+        cursor.execute('SELECT id FROM neighborhoods WHERE id=?', (dist_id,))
+        existing_neighborhood = cursor.fetchone()
+        # checks to see if nbhd with identical dist_id exists
+
+        if existing_neighborhood:
+            # Use the existing neighborhood
+            neighborhood_id = existing_neighborhood[0]
+        else:
+            # Create a new neighborhood
+            cursor.execute('INSERT INTO neighborhoods (id) VALUES (?)', (dist_id,))
+            neighborhood_id = cursor.lastrowid
+            self.connection.commit()
+
+        # Now add the parcel with the determined neighborhood_id
+        cursor.execute('INSERT INTO parcels (address, dist_id) VALUES (?, ?)', (address, neighborhood_id))
         self.connection.commit()
+
 
     def add_tree(self, tree):
         cursor = self.connection.cursor()
@@ -126,4 +148,34 @@ class Community:
             tree.parcel.add_tree(tree)
             self.add_parcel(tree.address, tree.dist_id)
     
+        self.connection.commit()
+
+    def remove_tree(self, species, maturation, address):
+        cursor = self.connection.cursor()
+
+        # Select tree_id based on species, maturation, and address
+        cursor.execute(
+            'SELECT id FROM trees WHERE species=? AND maturation=? AND address=? LIMIT 1',
+            (species, maturation, address)
+        )
+        
+        tree_id = cursor.fetchone()
+
+        if tree_id:
+            tree_id = tree_id[0]
+
+            # Delete the tree
+            cursor.execute('DELETE FROM trees WHERE id=?', (tree_id,))
+
+            # Check if the corresponding parcel is now empty, and if so, remove it
+            cursor.execute('SELECT parcel_id FROM trees WHERE id=?', (tree_id,))
+            parcel_id = cursor.fetchone()[0]
+
+            cursor.execute('SELECT COUNT(*) FROM trees WHERE parcel_id=?', (parcel_id,))
+            tree_count = cursor.fetchone()[0]
+
+            if tree_count == 0:
+                cursor.execute('DELETE FROM parcels WHERE id=?', (parcel_id,))
+                self.connection.commit()
+
         self.connection.commit()

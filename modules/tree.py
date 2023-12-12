@@ -8,7 +8,11 @@ module -- tree.py
 """
 
 from parcel import Parcel
+from neighborhood import Neighborhood
 from pygris.geocode import geocode
+import os
+
+os.chdir('/Users/kalliann/Documents/Tree-Equity-Project/modules')
 
 class Tree(Parcel):
     '''
@@ -50,9 +54,28 @@ class Tree(Parcel):
         self.status = 'planned'
         return self.status
     
-    def tree_loss(self):
+    def death(self):
         self.status = False
         return self.status
+    
+    def biodiversity(self):
+        nbhd = Neighborhood(self.district)
+        
+        x = nbhd.species_dist()
+        
+        if self.species in x and x[self.species] > 10:
+            return True
+        else:
+            return False
+    
+    def heat_vuln(self):
+        
+        at_risk = ['red maple', 'norther red oak']
+        
+        if self.species in at_risk:
+            return True
+        else:
+            return False
     
     def __str__(self):
         return f"About this tree...\n" \
