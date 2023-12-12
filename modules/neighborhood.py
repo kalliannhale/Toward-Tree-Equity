@@ -140,7 +140,7 @@ class Neighborhood:
         
         # if percent_species > 0.1, recommend against
 
-    def species_dist(self):
+    def spec_dist(self):
         """
         Retrieves the species dist by percentage for a 
         given district ID and stores them in a list.
@@ -204,7 +204,7 @@ class Neighborhood:
             land_use = data.loc[df.index[0], 'LU_GENERAL']
         
         else:
-            land_use = 'Not Found'
+            land_use = 'Unspecified or not found.'
         
         return land_use
     

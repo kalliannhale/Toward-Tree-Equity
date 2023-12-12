@@ -52,12 +52,17 @@ class Parcel(Neighborhood):
             print(f"Geocoding failed for address '{address}': {e}")
             print()
             
+            self.geoerror = True
+            self.raw_address = address
             self.address = address
             self.latitude = None
             self.longitude = None
             self.geoid = None
             self.equity_score = None
-            self.geoerror = True
+            self.heat_disparity = None
+            self.trees = {}
+            self.planned_trees = []
+            self.losses = {}
     
     def get_geoerror(self):
         return self.geoerror
@@ -113,6 +118,7 @@ class Parcel(Neighborhood):
         
         if species not in self.losses:
             self.losses[species] = 0
+            return None
         
         for t in self.trees[species]:
             if t.species == species and t.maturation == maturation and t.address == address:
@@ -121,6 +127,9 @@ class Parcel(Neighborhood):
                 break
     
     def decline(self, species, maturation, address):
+        
+        if species not in self.trees:
+            return None
         
         for t in self.trees[species]:
             if t.species == species and t.maturation == maturation and t.address == address:
@@ -214,9 +223,10 @@ class Parcel(Neighborhood):
         else:
             return f"About this land parcel...\n" \
                    f" \n"\
-                   f"  Land Use: {self.find_land_use()}\n"\
+                   f"  General land use: {self.find_land_use()}\n"\
                    f"  {'This is an open space!' if self.open_spaces() else ''}\n"\
                    f"  Trees planned: {len(self.planned)}\n"\
+                   f"  Trees lost: {sum(self.losses.values())}\n"\
                    f"  Equity Score: {self.equity_score}\n" \
                    f"  Heat Disparity: {self.heat_disparity}\n"\
                    f"  Priority Determination: {'Highest Need!' if self.indicate_priority() else 'Need is higher in more vulnerable communities.'}\n" \

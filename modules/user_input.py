@@ -20,9 +20,11 @@ def decision():
         user_input = input("Type 'Y' for yes or 'N' for no: ").upper()
         print()
         
-        if user_input.lower().strip() == 'y' or user_input.lower.strip() == 'n':
+        d = user_input.strip().lower()
+        
+        if d == 'y' or d == 'n':
             print("Got it, thanks!")
-            return user_input.lower().strip()
+            return d
         
         else:
             print("Invalid input. Please type 'Y' for yes or 'N' for no.")
@@ -49,6 +51,9 @@ def species():
         
     print("Got it, thanks!")
     print()
+    
+    if s == 'other':
+        return input("What is the name of the species you would like to record?")
         
     return s.lower().strip()
 
@@ -167,10 +172,19 @@ def address():
 def last_seen():
     
     date = input("When did you record this tree? "\
-                 "Use the following format: YYYY-MM-DD"
+                 "Use the following format: YYYY-MM-DD "
                  )
+    while len(date) != 10:
+        
+        print()
+        print("Sorry. Wrong format.")
+        date = input('Please try again: ')
+        date.strip()
+        print()
+        
     print()
     print("Got it, thanks!")
     print()
+    
     
     return date

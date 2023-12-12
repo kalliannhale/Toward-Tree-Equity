@@ -69,19 +69,22 @@ class Community:
             user_info = cursor.fetchone()
             return user_info
 
-    def add_neighborhood(self, dist_id):
+    def add_neighborhood(self, dist_id, district_name=None):
         with self.connection:
             cursor = self.connection.cursor()
+    
             cursor.execute('SELECT id FROM neighborhoods WHERE id=?', (dist_id,))
             existing_neighborhood = cursor.fetchone()
-            # searches for neighborhoods with the given dist_id
-
+    
             if existing_neighborhood:
                 return existing_neighborhood[0]
-                # if it exists, return the id
             else:
-                # Neighborhood doesn't exist, add a new neighborhood
-                cursor.execute('INSERT INTO neighborhoods (id) VALUES (?)', (dist_id,))
+                # Provide a default value for district_name if not provided
+                district_name = district_name or f'District {dist_id}'
+    
+                # Neighborhood doesn't exist, add a new neighborhood with a district name
+                cursor.execute('INSERT INTO neighborhoods (id, district) VALUES (?, ?)', (dist_id, district_name))
+    
                 # Return the newly added neighborhood's id
                 return cursor.lastrowid
 

@@ -56,11 +56,12 @@ class Tree(Parcel):
         return self.status
     
     def biodiversity(self):
+        
         nbhd = Neighborhood(self.district)
         
-        x = nbhd.species_dist()
+        x = nbhd.spec_dist()
         
-        if self.species in x and x[self.species] > 10:
+        if (self.species in x) and (x[self.species] > 10):
             return True
         else:
             return False

@@ -63,7 +63,8 @@ def main():
             print()
             
             tree = Tree(s, m, h, l, a, d, status='planned')
-            if tree.biodiversity:
+            
+            if tree.biodiversity == True:
                 print("The concentration of this species is already too high in this neighborhood.")
                 print()
             if tree.heat_vuln() and parcel.too_hot():
@@ -78,9 +79,10 @@ def main():
             if answer == 'y':
                 tree.plan_tree()
                 parcel.planned_trees(tree)
-                nbhd.store_parcel()
-                community.add_neighborhood()
-                community.add_tree()
+                nbhd.store_parcel(parcel)
+                
+                community.add_neighborhood(nbhd.dist_id, nbhd.district)
+                community.add_tree(tree)
             print("Tree planned successfully!")
 
         elif choice == "3":
@@ -90,6 +92,7 @@ def main():
             d = area_of_interest()
             print()
             a = address()
+            parcel = Parcel(a, d)
             print()
             s = species()
             print()
@@ -100,45 +103,64 @@ def main():
             l = last_seen()
             print()
             
+            print("Is this tree alive?")
+            answer = decision()
+            if answer == 'n':
+                tree = Tree(s, m, h, l, a, d)
+                tree.death()
+                parcel.tree_loss(s, m, a)
+            else:
+                tree = Tree(s, m, h, l, a, d)
+            
             nbhd = Neighborhood(d)
-            parcel = Parcel(a, d)
-            tree = Tree(s, m, h, l, a, d)
+            
             
             nbhd.store_parcel(parcel)
             parcel.add_tree(tree)
             
+            community.add_neighborhood(nbhd.dist_id, nbhd.district)
             community.add_tree(tree)
-            community.add_neighborhood(nbhd.dist_id)
             
             print("Tree successfully recorded.")
 
         elif choice == "4":
-            print("\n=== Report Tree Loss/Declining Health ===")
+            print("\n=== Report Loss/Declining Health ===")
+            print()
+            print("Is this tree already recorded?")
+            print()
             
-            print()
-            d = area_of_interest()
-            print()
-            a = address()
-            print()
-            s = species()
-            print()
-            m = maturation()
-            print()
-
-            print("Has this tree died?")
-            print()
             answer = decision()
             
-            parcel = Parcel(a, d)
-            
             if answer == 'y':
-                parcel.tree_loss(s, m, a)
-                community.remove_tree(s, m, a)
+                
+                print()
+                d = area_of_interest()
+                print()
+                a = address()
+                print()
+                s = species()
+                print()
+                m = maturation()
+                print()
+                print("Has this tree died?")
+                print()
+                answer = decision()
+                
+                parcel = Parcel(a, d)
+                
+                if answer == 'y':
+                    parcel.tree_loss(s, m, a)
+                    community.remove_tree(s, m, a)
+                    
+                if answer == 'n':
+                    parcel.decline(s, m, a)
+                    
+                print("Thank you for reporting.")
                 
             if answer == 'n':
-                parcel.decline(s, m, a)
-            
-            print("Thank you for reporting.")
+                print()
+                print("Please enter '3' to capture this tree.")
+                continue
             
         elif choice == "5":
             print("\n=== View Volunteer Data ===")
@@ -177,7 +199,8 @@ def main():
 
 
         elif choice == "6":
-            print("Exiting program.")
+            print()
+            print("Thank you for contributing to our community database!")
             break
 
         else:
