@@ -71,6 +71,9 @@ def main():
                 print("This species is vulnerable to extreme heat.")
                 print("This block experiences high heat.")
                 print()
+                #Checks if a tree species known for its heat 
+                #vulnerability is being planned in an area 
+                #with high heat disparity.
             
             print("Would you like to record this plan?")
             answer = decision()
@@ -116,6 +119,7 @@ def main():
             
             
             nbhd.store_parcel(parcel)
+            parcel.planned_trees
             parcel.add_tree(tree)
             
             community.add_neighborhood(nbhd.dist_id, nbhd.district)
@@ -145,12 +149,14 @@ def main():
                 print("Has this tree died?")
                 print()
                 answer = decision()
+                l = last_seen()
+                print()
                 
                 parcel = Parcel(a, d)
                 
                 if answer == 'y':
-                    parcel.tree_loss(s, m, a)
-                    community.remove_tree(s, m, a)
+                    parcel.tree_loss(s, m, a, l)
+                    community.remove_tree(s, m, a, l)
                     
                 if answer == 'n':
                     parcel.decline(s, m, a)
