@@ -13,7 +13,7 @@ def user_info():
     affiliation = input("Enter your organizational affiliation: ")
     return user_name, affiliation
 
-def yes_no():
+def decision():
     
     while True:
         
@@ -22,7 +22,7 @@ def yes_no():
         
         if user_input.lower().strip() == 'y' or user_input.lower.strip() == 'n':
             print("Got it, thanks!")
-            return answer.lower().strip()
+            return user_input.lower().strip()
         
         else:
             print("Invalid input. Please type 'Y' for yes or 'N' for no.")
@@ -89,7 +89,6 @@ def maturation():
     print("maturing - less than 24 years old")
     print("mature - 25 years or older")
     print()
-    print('None')
     
     m = input("How old is your tree? ")
     
@@ -135,7 +134,7 @@ def address():
     
     for attempt in range(4):
         
-        print('Where are you planting this tree?')
+        print('Where is this tree?')
         a = input('Enter address: ')
     
         try:
@@ -168,7 +167,7 @@ def address():
 def last_seen():
     
     date = input("When did you record this tree? "\
-                 "Use the following format: YYYY-MM-DD)"
+                 "Use the following format: YYYY-MM-DD"
                  )
     print()
     print("Got it, thanks!")

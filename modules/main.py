@@ -9,7 +9,7 @@ Created on Sun Dec 10 20:54:33 2023
 from community import Community
 from parcel import Parcel
 from tree import Tree
-from user_input import user_info, species, area_of_interest, maturation, health, last_seen, address
+from user_input import user_info, decision, species, area_of_interest, maturation, health, last_seen, address
 from neighborhood import Neighborhood
 
 def main():
@@ -24,12 +24,14 @@ def main():
 
     while True:
         print("\n=== Toward Tree Equity: An Accountability Mapping Tool ===")
+        print()
         print("1. Visualize Need")
         print("2. Plan a Tree")
         print("3. Record Existing/Planted Tree")
         print("4. Report Tree Loss/Declining Health")
         print("5. View Volunteer Data")
         print("6. Exit")
+        print()
 
         choice = input("Enter your choice (1-7): ")
 
@@ -46,9 +48,11 @@ def main():
             nbhd = Neighborhood(d)
             print(nbhd)
             
+            print()
             a = address()
             parcel = Parcel(a, d)
             print(parcel)
+            print()
             
             m = maturation()
             print()
@@ -60,7 +64,7 @@ def main():
             
             tree = Tree(s, m, h, l, a, d, status='planned')
             if tree.biodiversity:
-                print("The concentration of this species is already too high in this neighbhorhood.")
+                print("The concentration of this species is already too high in this neighborhood.")
                 print()
             if tree.heat_vuln() and parcel.too_hot():
                 print("This species is vulnerable to extreme heat.")
@@ -68,7 +72,8 @@ def main():
                 print()
             
             print("Would you like to record this plan?")
-            answer = yes_no()
+            answer = decision()
+            print()
             
             if answer == 'y':
                 tree.plan_tree()
@@ -120,14 +125,13 @@ def main():
             m = maturation()
             print()
 
-            print(Has this tree died?)
+            print("Has this tree died?")
             print()
-            answer = yes_no()
+            answer = decision()
             
             parcel = Parcel(a, d)
             
             if answer == 'y':
-                status = False
                 parcel.tree_loss(s, m, a)
                 community.remove_tree(s, m, a)
                 
@@ -147,7 +151,7 @@ def main():
             print()
             
             print("Would you like to investigate a specific address?")
-            answer = yes_no()
+            answer = decision()
             
             if answer == 'y':
                 print()
@@ -158,7 +162,7 @@ def main():
                 print()
                 
             print("Would you like to view the data logged by our community?")
-            answer = yes_no()
+            answer = decision()
             print()
             
             if answer == 'y':

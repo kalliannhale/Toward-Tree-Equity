@@ -122,33 +122,25 @@ class Community:
 
     def add_tree(self, tree):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT id FROM parcels WHERE address=? AND dist_id=?', 
-                       (tree.address, tree.dist_id)
-                       )
+    
+        # Check if the parcel exists, or add it
+        cursor.execute('SELECT id FROM parcels WHERE address=? AND dist_id=?', (tree.address, tree.dist_id))
         existing_parcel = cursor.fetchone()
-
+    
         if existing_parcel:
             parcel_id = existing_parcel[0]
         else:
-            cursor.execute('INSERT INTO parcels (address, dist_id) VALUES (?, ?)', 
-                           (tree.address, tree.dist_id)
-                           )
-            parcel_id = cursor.lastrowid
+            # Create a new parcel
+            parcel_id = self.add_parcel(tree.address, tree.dist_id)
     
+        # Insert tree data
         cursor.execute('''
             INSERT INTO trees (status, species, maturation, health, last_seen, parcel_id)
             VALUES (?, ?, ?, ?, ?, ?)
         ''', (tree.status, tree.species, tree.maturation, tree.health, tree.last_seen, parcel_id))
     
-        if existing_parcel:
-            dist_id = tree.dist_id
-        else:
-            dist_id = tree.dist_id
-            tree.parcel = Parcel(tree.address, tree.district)
-            tree.parcel.add_tree(tree)
-            self.add_parcel(tree.address, tree.dist_id)
-    
         self.connection.commit()
+
 
     def remove_tree(self, species, maturation, address):
         cursor = self.connection.cursor()
@@ -194,9 +186,7 @@ class Community:
     
             print("\nTrees:")
             for tree in trees:
-                print(f"ID: {tree[0]}, Status: {tree[1]}, Species: {tree[2]},"\ 
+                print(f"ID: {tree[0]}, Status: {tree[1]}, Species: {tree[2]},"\
                       f"Maturation: {tree[3]}, Health: {tree[4]},"\
                       f"Date Last Seen: {tree[5]}, Parcel ID: {tree[6]}"\
                       )
-    
-            self.connection.commit()

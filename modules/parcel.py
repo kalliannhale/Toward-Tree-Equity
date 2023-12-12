@@ -131,13 +131,16 @@ class Parcel(Neighborhood):
         land_use = self.landuse(self)
         return land_use
     
+    
     def open_spaces(self):
         pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/open_spaces_real.csv'
         df = pd.read_csv(pathway)
         # Check if the address is present in the "ADDRESS" column
-        match_found = any(df['ADDRESS'] == self.address)
+        df = df['ADDRESS'].str.lower()
+
+        m = df.loc[df == self.raw_address]
         
-        if match_found is not None:
+        if not m.empty:
             return True
         else:
             return False
