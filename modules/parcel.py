@@ -189,8 +189,7 @@ class Parcel(Neighborhood):
             df = df.reset_index()
             
             heat_disparity = df['temp_diff'][0]
-        
-            return heat_disparity
+            return heat_disparity 
         
         else:
             return None

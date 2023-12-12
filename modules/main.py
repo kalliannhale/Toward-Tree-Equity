@@ -138,10 +138,39 @@ def main():
             
         elif choice == "5":
             print("\n=== View Volunteer Data ===")
-            # should gracefully print the number of trees planted in priority neighborhoods
-            # should gracefully display/print trees added to community database
-            # should gracefully print tree losses
             
+            print()
+            d = area_of_interest()
+            print()
+            nbhd = Neighborhood(d)
+            print(nbhd)
+            print()
+            
+            print("Would you like to investigate a specific address?")
+            answer = yes_no()
+            
+            if answer == 'y':
+                print()
+                a = address()
+                print()
+                parcel = Parcel(a, d)
+                print(parcel)
+                print()
+                
+            print("Would you like to view the data logged by our community?")
+            answer = yes_no()
+            print()
+            
+            if answer == 'y':
+                print("Addresses logged by our volunteers...")
+                print()
+                community.print_parcels()
+
+                print("Trees recorded...")
+                print()
+                community.print_trees()
+                print()
+
 
         elif choice == "6":
             print("Exiting program.")

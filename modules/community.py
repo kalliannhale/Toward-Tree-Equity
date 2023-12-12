@@ -177,5 +177,26 @@ class Community:
             if tree_count == 0:
                 cursor.execute('DELETE FROM parcels WHERE id=?', (parcel_id,))
                 self.connection.commit()
+                
+        def print_parcels(self):
+            cursor = self.connection.cursor()
+            cursor.execute('SELECT * FROM parcels')
+            parcels = cursor.fetchall()
+    
+            print("\nParcels:")
+            for parcel in parcels:
+                print(f"ID: {parcel[0]}, Address: {parcel[1]}, District ID: {parcel[2]}")
 
-        self.connection.commit()
+        def print_trees(self):
+            cursor = self.connection.cursor()
+            cursor.execute('SELECT * FROM trees')
+            trees = cursor.fetchall()
+    
+            print("\nTrees:")
+            for tree in trees:
+                print(f"ID: {tree[0]}, Status: {tree[1]}, Species: {tree[2]},"\ 
+                      f"Maturation: {tree[3]}, Health: {tree[4]},"\
+                      f"Date Last Seen: {tree[5]}, Parcel ID: {tree[6]}"\
+                      )
+    
+            self.connection.commit()
