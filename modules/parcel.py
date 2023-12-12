@@ -9,7 +9,7 @@ module -- parcel.py
         equitable resource distribution.
         
 """
-import os
+
 import pandas as pd
 from neighborhood import Neighborhood
 from pygris.geocode import geocode

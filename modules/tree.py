@@ -10,9 +10,6 @@ module -- tree.py
 from parcel import Parcel
 from neighborhood import Neighborhood
 from pygris.geocode import geocode
-import os
-
-os.chdir('/Users/kalliann/Documents/Tree-Equity-Project/modules')
 
 class Tree(Parcel):
     '''

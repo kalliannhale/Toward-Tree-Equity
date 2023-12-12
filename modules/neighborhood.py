@@ -23,6 +23,7 @@ class Neighborhood:
         self.district = district
         self.parcels = {}
         self.dist_id = self.find_dist_id()
+        self.priority_plantings = 0
         
     def get_district(self):
         return self.district
@@ -55,6 +56,15 @@ class Neighborhood:
         pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/district_data_v.csv'
         df = pd.read_csv(pathway)
         return df
+    
+    def priority_plantings(self, address):
+        # Locate the corresponding parcel
+        parcel = self.parcels.get(address)
+
+        for parcel in self.parcels.values():
+            for t in parcel.get_trees().values():
+                if parcel.indicate_priority():
+                self.priority_plantings += len(trees_list)
     
     def loss_or_gain(self):
         data = self.dist_data()
@@ -162,8 +172,11 @@ class Neighborhood:
         '''
         stores parcels
         '''
+       
         address = parcel.address
-        self.parcels[address] = parcel
+        
+        if address not in self.parcels:
+            self.parcels[address] = parcel
     
     def official_addresses(self):
         
