@@ -7,8 +7,6 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 
-
-
 class Neighborhood:
     
     def __init__(self, district):
@@ -237,7 +235,7 @@ class Neighborhood:
           City of Boston (Analyze Boston).
         '''
         
-        pathway = os.path.join(os.path.dirname(__file__), 'Canopy_Change_Assessment%3A_Heat_Metrics.shp')
+        pathway = 'Canopy_Change_Assessment%3A_Heat_Metrics.shp'
         heat = gpd.read_file(pathway)
         heat.plot(cmap='hsv', edgecolor='black')
         
@@ -249,7 +247,7 @@ class Neighborhood:
           City of Boston (Analyze Boston).
         '''
         
-        pathway = os.path.join(os.path.dirname(__file__), 'social_vulnerability.shp')
+        pathway = 'social_vulnerability.shp'
         heat = gpd.read_file(pathway)
         heat.plot(cmap='hsv', edgecolor='black')
     
