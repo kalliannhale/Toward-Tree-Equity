@@ -118,7 +118,7 @@ def main():
             
             
             nbhd.store_parcel(parcel)
-            parcel.planned_trees
+            parcel.plan_trees(tree)
             parcel.add_tree(tree)
             
             community.add_neighborhood(nbhd.dist_id, nbhd.district)
