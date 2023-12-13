@@ -53,7 +53,7 @@ class Community:
                     health TEXT,
                     last_seen TEXT,
                     parcel_id INTEGER,
-                    address TEXT NOT NULL,  -- Add the address column
+                    address TEXT NOT NULL,
                     FOREIGN KEY (parcel_id) REFERENCES parcels (id)
                 )
             ''')
