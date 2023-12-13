@@ -1,5 +1,11 @@
 # Toward-Tree-Equity
 
+Main Modules:
+* neighborhood.py
+* community.py
+* parcel.py
+* tree.py
+
 This project is limited to Boston, MA; and, in particular, has been designed only for those neighborhoods with specific canopy expansion strategies outlined in the Boston Urban Forest Plan, more of which can be : https://www.boston.gov/departments/parks-and-recreation/urban-forest-plan.
 
 * Please format addresses accordingly: 'number name street, Boston, MA'.
@@ -8,11 +14,11 @@ This project is limited to Boston, MA; and, in particular, has been designed onl
 
 IMPORTANT!! PLEASE READ:
 
-* If multiple addresses are failing the geocoding process:
+* If the package does not seem to be running properly:
   
-  *** check the filepaths in the read_csv() method in the neighborhood module
-  
-  *** copy & paste the absolute path of the files of the same name into the associated        dictionary as appropriate.
+  *** copy & paste the absolute path of the files of the same name into the associated pathway variable as appropriate.
 
-  *** proper categorization of each address relies heavily on reading the provided data       set files! However the package is being run, they MUST be accessible.
+  *** proper categorization of each address relies heavily on reading the provided data set files! However the package is being run, they MUST be accessible.
 
+  LIMITATIONS:
+  * Only one tree may be entered at a time.

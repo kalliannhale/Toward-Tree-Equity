@@ -1,41 +1,66 @@
 '''
-module -- neighborhood.py
+Analyzes "official" municipal data to determine a
+priority zone.
 
-    Incorporates US Census, MassGIS, & Tree Equity Score 
-        data & methodological parameters to manage 
-        “official,” municipal data sets that are immutable, 
-        but accessible to analyze so-called “priority 
-        zones” with three or more indicators.
-        
 '''
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import os
-
 
 class Neighborhood:
-    '''
-    Analyzes "official" municipal data to determine a
-        priority zone.
-    '''
     
     def __init__(self, district):
-        
+        '''
+        constructor:
+          initializes a new instance of the Neighborhood class.
+    
+       attributes:
+          district:
+              a string representing the name of the neighborhood.
+          parcels:
+              a dictionary storing Parcel objects with addresses as keys.
+          dist_id: 
+              an integer representing the district ID.
+          priority_plantings: 
+              an integer representing the number of trees planted in priority areas.
+        '''
         self.district = district
         self.parcels = {}
         self.dist_id = self.find_dist_id()
+        self.priority_plantings = 0
         
     def get_district(self):
+        '''
+        method -- get_district
+          returns the name of the neighborhood.
+        '''
         return self.district
     
     def get_dist_id(self):
+        '''
+        method -- get_dist_id
+          returns the district ID.
+        '''
         return self.dist_id
         
     def get_parcels(self):
-         return self.parcels
+        '''
+        method -- get_parcels
+          returns the dictionary of Parcel objects.
+        '''
+        return self.parcels
         
     def find_dist_id(self):
+        '''
+        method -- find_dist_id
+          retrieves the district ID for the given neighborhood.
+    
+        returns -- int
+          returns the district ID.
+          
+        raises -- ValueError
+          raises an exception if the district does not exist.
+        '''
         
         district_ids = {'allston brighton': 1, 'back bay': 2, 'beacon hill': 3, 
                         'charlestown': 4, 'central': 5, 'dorchester': 6, 
@@ -50,116 +75,212 @@ class Neighborhood:
         else:
             raise ValueError("This district does not exist.")
     
-    def read_dist_data(self):
-        """
-        Reads the district data from the 'district_data_v.csv' file.
-        """
-        pathway = os.path.join(os.path.dirname(__file__), 'district_data_v.csv')
+    def dist_data(self):
+        '''
+        method -- dist_data
+          reads the district data from the 
+          'district_data_v.csv' file.
+    
+        returns -- DataFrame
+          returns the district data as a pandas DataFrame.
+        '''
+        
+        pathway = 'district_data_v.csv'
         df = pd.read_csv(pathway)
         return df
     
-    def plot_gain_loss(self):
-        """
-        Plots the growth and loss for a given district ID using a bar chart.
-        """
+    def priority_planting(self, species):
+        '''
+        method -- priority_planting
+          counts the number of trees recorded in
+          parcels for which equity scores are lower than
+          70; i.e., priority areas where trees have 
+          been either recorded 
+    
+        parameters -- species: str
+          the species for which the priority 
+          plantings are calculated.
+        '''
+        
+        for parcel in self.parcels.values():
+            if parcel.indicate_priority():
+                for t in parcel.trees.values():
+                    self.priority_plantings += len(parcel.trees[species])
+    
+    def loss_or_gain(self):
+        '''
+        method -- loss_or_gain
+          calculates the net loss or gain in acres 
+          for the given district from 2014 to 2019.
+    
+        returns -- str
+          returns a string describing the net acreage change.
+        '''
+        
         data = self.dist_data()
-        district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data[['GROWTH', 'LOSS']].sum()
+        dist_stat = data[data['DIST_ID'] == self.dist_id]
+        r = dist_stat['NET'].iloc[0]
+        q = dist_stat['LOSS'].iloc[0]
+        p = dist_stat['GROWTH'].iloc[0]
+        
+        acreage = abs(p - q)
+        
+        return f"Experienced a net {r} of {acreage} acres from 2014-2019."
+    
+    def plot_gain_loss(self):
+        '''
+        method -- plot_gain_loss
+          plots the growth and loss for a given 
+          district ID using a bar chart.
+        '''
+        
+        data = self.dist_data()
+        district_data = data[data['DIST_ID'] == self.dist_id]
+        agg_data = district_data[['GROWTH', 'LOSS']].sum()
         
         plt.figure(figsize=(8, 6))
-        plt.bar(['Growth', 'Loss'], aggregated_data.values, color=['green', 'red'])
+        plt.bar(['Growth', 'Loss'], agg_data.values, color=['green', 'red'])
         plt.xlabel('Outcome')
         plt.ylabel('Acres')
-        plt.title(f'Growth and Loss for District ID {dist_id}')
+        plt.title(f'Growth and Loss for District ID {self.district}')
         plt.show()
-
-    def plot_age_dist(self, dist_id):
-        """
-        Plots the age distribution for a given district ID.
-        """
+    
+    def plot_age_dist(self):
+        '''
+        method -- plot_age_dist
+          plots the age distribution for 
+          a given district ID.
+        '''
+        
         data = self.dist_data()
-        district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data['AGE_DIST'].apply(eval).apply(pd.Series).sum()
-        aggregated_data *= 100
+        district_data = data[data['DIST_ID'] == self.dist_id]
+        agg_data = district_data['AGE_DIST'].apply(eval).apply(pd.Series).sum()
+        agg_data *= 100
         
         plt.figure(figsize=(10, 6))
-        aggregated_data.plot(kind='bar', color='orange')
+        agg_data.plot(kind='bar', color='orange')
         plt.xlabel('Age Distribution')
         plt.ylabel('Percentage')
-        plt.title(f'Age Distribution for District ID {dist_id}')
+        plt.title(f'Age Distribution for District ID {self.district}')
         plt.show()
-
-    def plot_genus_dist(self, dist_id):
-        """
-        Plots the genus distribution for a given district ID.
-        """
+    
+    def plot_genus_dist(self):
+        '''
+        method -- plot_genus_dist
+          plots the genus distribution for 
+          a given district ID.
+        '''
+        
         data = self.dist_data()
-        district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data['GENUS_DIST'].apply(eval).apply(pd.Series).sum()
-        aggregated_data *= 100
+        district_data = data[data['DIST_ID'] == self.dist_id]
+        agg_data = district_data['GENUS_DIST'].apply(eval).apply(pd.Series).sum()
+        agg_data *= 100
         
         plt.figure(figsize=(12, 8))
-        aggregated_data.plot(kind='bar', color='purple')
+        agg_data.plot(kind='bar', color='purple')
         plt.xlabel('Genus Distribution')
         plt.ylabel('Percentage')
-        plt.title(f'Genus Distribution for District ID {dist_id}')
+        plt.title(f'Genus Distribution for District ID {self.district}')
         plt.show()
         
-    def plot_species_dist(self, dist_id):
-        """
-        Plots the species distribution for a given district ID.
-        """
+    def plot_species_dist(self):
+        '''
+        method -- plot_species_dist
+          plots the species distribution for 
+          a given district ID.
+        '''
+        
         data = self.dist_data()
-        district_data = data[data['DIST_ID'] == self.district]
-        aggregated_data = district_data['SPEC_DIST'].apply(eval).apply(pd.Series).sum()
-        aggregated_data *= 100
+        district_data = data[data['DIST_ID'] == self.dist_id]
+        agg_data = district_data['SPEC_DIST'].apply(eval).apply(pd.Series).sum()
+        agg_data *= 100
         
         plt.figure(figsize=(12, 8))
-        aggregated_data.plot(kind='bar', color='skyblue')
+        agg_data.plot(kind='bar', color='skyblue')
         plt.xlabel('Species')
         plt.ylabel('Percentage')
-        plt.title(f'Species Distribution for District ID {dist_id}')
+        plt.title(f'Species Distribution for District ID {self.district}')
         plt.show()
         
         # if percent_species > 0.1, recommend against
-
-    def species_dist(self, dist_id):
-        """
-        Retrieves the species dist by percentage for a 
-        given district ID and stores them in a list.
-        """
+    
+    def percent_sp(self):
+        '''
+        method -- spec_dist
+          retrieves the species distribution by 
+          percentage for a given district ID and 
+          stores them in a dictionary.
+        
+        returns -- dict
+          returns a dictionary containing species 
+          and their corresponding percentages.
+        '''
+        
         data = self.dist_data()
-        district_data = data[data['DIST_ID'] == self.district]
+        district_data = data[data['DIST_ID'] == self.dist_id]
         species_dist = district_data['SPEC_DIST'].apply(eval).apply(pd.Series)
-
+        
         percent_species = []
         for column in species_dist.columns:
             total_percentage = species_dist[column].sum() * 100
             percent_species.append((column, total_percentage))
+        
+        return dict(percent_species)
 
-        return percent_species
-    
     def plot_heat_index(self):
-        pathway = os.path.join(os.path.dirname(__file__), 'Canopy_Change_Assessment%3A_Heat_Metrics.shp')
+        '''
+        method -- plot_heat_index
+          plots the heat index using data 
+          from a shapefile supplied by the 
+          City of Boston (Analyze Boston).
+        '''
+        
+        pathway = 'Canopy_Change_Assessment%3A_Heat_Metrics.shp'
         heat = gpd.read_file(pathway)
-        heat.plot(cmap = 'hsv', edgecolor = 'black')
+        heat.plot(cmap='hsv', edgecolor='black')
         
     def plot_vulnerability(self):
-        pathway = os.path.join(os.path.dirname(__file__), 'social_vulnerability.shp')
+        '''
+        method -- plot_vulnerability
+          plots the vulnerability index using 
+          data from a shapefile supplied by the 
+          City of Boston (Analyze Boston).
+        '''
+        
+        pathway = 'social_vulnerability.shp'
         heat = gpd.read_file(pathway)
-        heat.plot(cmap = 'hsv', edgecolor = 'black')
+        heat.plot(cmap='hsv', edgecolor='black')
     
     def store_parcel(self, parcel):
         '''
-        stores parcels
+        method -- store_parcel
+          stores parcels recorded within the district
+          in a dictionary by address.
+    
+        parameters:
+          parcel -- a Parcel object representing 
+          the parcel to be stored.
         '''
+        
         address = parcel.address
-        self.parcels[address] = parcel
+        
+        if address not in self.parcels:
+            self.parcels[address] = parcel
     
     def official_addresses(self):
+        '''
+        method -- official_addresses
+          retrieves addresses of officially recorded land parcels 
+          from a CSV file supplied by the City of Boston 
+          (Analyze Boston).
+    
+        returns -- DataFrame
+          returns a DataFrame with a validated address and
+          index that can be used to locate other variables
+          in the file.
+        '''
         
-        pathway = os.path.join(os.path.dirname(__file__), 'parcels.csv')
-        
+        pathway = 'parcels.csv'
         data = pd.read_csv(pathway, low_memory=False)
         
         data['ST_NUM'] = data['ST_NUM'].str.extract('(\d+)')
@@ -171,9 +292,19 @@ class Neighborhood:
         return pd.DataFrame({'ADDRESS': addresses})
     
     def landuse(self, parcel):
+        '''
+        method -- landuse
+          retrieves land use information for parcels stored in
+          a municipal database.
+    
+        parameters:
+          parcel -- a Parcel object representing the parcel.
+    
+        returns -- str
+          ex. 'Residential' or 'Commercial'
+        '''
         
-        pathway = os.path.join(os.path.dirname(__file__), 'parcels.csv')
-        
+        pathway = 'parcels.csv'
         data = pd.read_csv(pathway, low_memory=False)
         
         df = self.official_addresses()
@@ -182,68 +313,15 @@ class Neighborhood:
         if not df.empty:
             match = df.index[0]
             land_use = data.loc[df.index[0], 'LU_GENERAL']
-        
         else:
-            land_use = 'Not Found'
-        
+            land_use = 'Unspecified or not found.'
         return land_use
     
-    # def csv_path(self, topic):
-    #     '''
-    #     stores the filepath in a dictionary
-        
-    #     will have to change this path
-    #     '''
-    #     filepath = {'equity_score': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/BOS_Tree_Equity_Score.csv',
-    #               'parcels': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/parcels.csv',
-    #               'geoid_match': '/Users/kalliann/Documents/Tree-Equity-Project/data sets/matching_ids.csv',
-    #               'dist_data': None,
-    #               'census_block_groups':'/Users/kalliann/Documents/Tree-Equity-Project/data sets/Census2020_BlockGroups.shp',
-    #               'open_spaces':'open-spaces.csv',
-    #               'social_vulnerability': 'social_vulnerability.csv',
-    #               'heat_report_shapes': 'Canopy_Change_Assessment%3A_Heat_Metrics.shp',
-    #         }
-        
-    #     return filepath[topic]
-    
-    def compare_geoids(topic_one, topic_two):
-      """
-      Finds matching IDs in two CSV files and saves them to a new file.
-
-      Returns:
-          A list of matching IDs.
-      """
-      
-      with open(self.csv_path('geoid_match'), "w"):
-          pass
-      
-      path_one = os.path.join(os.path.dirname(__file__), topic_one)
-      path_two = os.path.join(os.path.dirname(__file__), topic_two)
-
-      df1 = pd.read_csv(path_one)
-      df2 = pd.read_csv(path_two)
-
-      matching_ids = []
-
-      for i, row1 in df1.iterrows():
-        geoid1 = row1["GEOID"]
-
-        try:
-          j = df2.index[df2["GEOID"] == geoid1].tolist()[0]
-          matching_ids.append((geoid1, j))
-        except IndexError:
-          pass
-
-      df_matching_ids = pd.DataFrame(matching_ids, columns=["GEOID1", "GEOID2"])
-      df_matching_ids.to_csv(self.csv_path('geoid_match'), index=False)
-
-      # Optionally return the matching IDs
-      return matching_ids
-
-    def is_address_in_open_spaces(self, address: str) -> bool:
-        open_spaces_df = pd.read_csv(self.csv_path('open_spaces'))
-        is_in_open_spaces = address.lower() in open_spaces_df['ADDRESS'].str.lower().values
-        return is_in_open_spaces
-  
     def __str__(self):
-        pass
+        return (
+            f"Neighborhood: {self.district}\n"
+            f"District ID: {self.dist_id}\n"
+            f"{self.loss_or_gain()}\n"
+            f"Total addresses recorded by community: {len(self.parcels)}\n"
+            f"Number of trees planted or verified in priority areas: {self.priority_plantings}"
+        )
