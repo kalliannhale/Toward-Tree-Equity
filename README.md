@@ -1,5 +1,11 @@
 # Toward-Tree-Equity
 
+Main Modules:
+* neighborhood.py
+* community.py
+* parcel.py
+* tree.py
+
 This project is limited to Boston, MA; and, in particular, has been designed only for those neighborhoods with specific canopy expansion strategies outlined in the Boston Urban Forest Plan, more of which can be : https://www.boston.gov/departments/parks-and-recreation/urban-forest-plan.
 
 * Please format addresses accordingly: 'number name street, Boston, MA'.
