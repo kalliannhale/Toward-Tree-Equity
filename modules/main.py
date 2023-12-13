@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Dec 10 20:54:33 2023
-
-@author: kalliann
+file - main.py
+    demonstrates usage
 """
 
 from community import Community
