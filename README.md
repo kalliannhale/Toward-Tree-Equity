@@ -6,7 +6,7 @@ Important Modules:
 * parcel.py
 * tree.py
 
-Running "main.py" allows for a sample user_input() interaction.
+The main.py file draws from user_input() to simulate how these classes and methods were envisioned for use in a sample user input experience.
 
 This project is limited to Boston, MA; and, in particular, has been designed only for those neighborhoods with specific canopy expansion strategies outlined in the Boston Urban Forest Plan, more of which can be : https://www.boston.gov/departments/parks-and-recreation/urban-forest-plan. 
 
