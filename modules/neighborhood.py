@@ -87,7 +87,7 @@ class Neighborhood:
           returns the district data as a pandas DataFrame.
         '''
         
-        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/district_data_v.csv'
+        pathway = 'district_data_v.csv'
         df = pd.read_csv(pathway)
         return df
     
@@ -282,7 +282,7 @@ class Neighborhood:
           in the file.
         '''
         
-        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/parcels.csv'
+        pathway = 'parcels.csv'
         data = pd.read_csv(pathway, low_memory=False)
         
         data['ST_NUM'] = data['ST_NUM'].str.extract('(\d+)')
@@ -306,7 +306,7 @@ class Neighborhood:
           ex. 'Residential' or 'Commercial'
         '''
         
-        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/parcels.csv'
+        pathway = 'parcels.csv'
         data = pd.read_csv(pathway, low_memory=False)
         
         df = self.official_addresses()
