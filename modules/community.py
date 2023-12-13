@@ -25,7 +25,7 @@ class Community:
         '''
         with self.connection:
             cursor = self.connection.cursor()
-    
+
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS neighborhoods (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,7 +33,7 @@ class Community:
                 )
             ''')
             # creating Neighborhood table
-    
+
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS parcels (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,7 +43,7 @@ class Community:
                 )
             ''')
             # creating Parcel table
-    
+
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS trees (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,11 +53,12 @@ class Community:
                     health TEXT,
                     last_seen TEXT,
                     parcel_id INTEGER,
+                    address TEXT NOT NULL,  -- Add the address column
                     FOREIGN KEY (parcel_id) REFERENCES parcels (id)
                 )
             ''')
             # creating Tree table
-    
+
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -194,33 +195,33 @@ class Community:
         '''
         method -- remove_tree
           removes a tree from the database.
-    
+
         parameters:
-            
+
           species:
-              a string representing the species 
+              a string representing the species
               of the tree.
           maturation:
-              a string representing the maturation 
+              a string representing the maturation
               stage of the tree.
-          address: 
-              a string representing the address 
+          address:
+              a string representing the address
               of the tree.
         '''
         with self.connection:
             cursor = self.connection.cursor()
-    
+
             # select tree_id based on species, maturation, and address
             cursor.execute(
                 'SELECT id FROM trees WHERE species=? AND maturation=? AND address=? LIMIT 1',
                 (species, maturation, address)
             )
-    
+
             tree_id = cursor.fetchone()
-    
+
             if tree_id:
                 tree_id = tree_id[0]
-    
+
                 cursor.execute('DELETE FROM trees WHERE id=?', (tree_id,))
                 # deletes trees
     
