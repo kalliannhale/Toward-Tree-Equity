@@ -110,7 +110,7 @@ def main():
             if answer == 'n':
                 tree = Tree(s, m, h, l, a, d)
                 tree.death()
-                parcel.tree_loss(s, m, a)
+                parcel.tree_loss(s, m, a, l)
             else:
                 tree = Tree(s, m, h, l, a, d)
             
