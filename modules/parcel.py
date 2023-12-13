@@ -298,7 +298,7 @@ class Parcel(Neighborhood):
             True if the parcel is designated as open space, 
             False otherwise.
         '''
-        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/open_spaces_real.csv'
+        pathway = 'open_spaces_real.csv'
         df = pd.read_csv(pathway)
         df = df['ADDRESS'].str.lower()
     
@@ -317,7 +317,7 @@ class Parcel(Neighborhood):
         returns -- int
             the tree equity score.
         '''
-        pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/BOS_Tree_Equity_Score.csv'
+        pathway = 'BOS_Tree_Equity_Score.csv'
         pd.read_csv(pathway)
         
         if self.geoerror == False:
@@ -359,7 +359,7 @@ class Parcel(Neighborhood):
         if self.geoerror == False:
             self.set_geoid()
             
-            pathway = '/Users/kalliann/Documents/Tree-Equity-Project/modules/BOS_Tree_Equity_Score.csv'
+            pathway = 'BOS_Tree_Equity_Score.csv'
             df = pd.read_csv(pathway)
             df = df.loc[df['GEOID'] == self.geoid]
             df = df.reset_index()
