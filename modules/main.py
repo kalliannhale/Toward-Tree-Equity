@@ -60,10 +60,6 @@ def main():
             parcel = Parcel(a, d)
             print()
             print()
-            print("Heat even hours in Boston...")
-            nbhd.plot_heat_index()
-            print()
-            print()
             print(parcel)
             
         elif choice == "2":
@@ -186,7 +182,7 @@ def main():
                     community.remove_tree(s, m, a, l)
                     
                 if answer == 'n':
-                    parcel.decline(s, m, a)
+                    parcel.decline(s, m, a, l)
                     
                 print("Thank you for reporting.")
                 
