@@ -21,6 +21,3 @@ IMPORTANT!! PLEASE READ:
   *** copy & paste the absolute path of the files of the same name into the associated pathway variable as appropriate.
 
   *** proper categorization of each address relies heavily on reading the provided data set files! However the package is being run, they MUST be accessible.
-
-  LIMITATIONS:
-  * Only one tree may be entered at a time.
