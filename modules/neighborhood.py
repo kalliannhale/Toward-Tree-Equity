@@ -317,7 +317,6 @@ class Neighborhood:
             land_use = 'Unspecified or not found.'
         return land_use
     
-    
     def __str__(self):
         return (
             f"Neighborhood: {self.district}\n"
